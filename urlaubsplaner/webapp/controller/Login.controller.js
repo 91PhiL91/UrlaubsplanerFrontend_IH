@@ -1,11 +1,11 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "sap/ui/model/odata/v2/ODataModel"
+    "./helper/Datahelper"
 ],
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
      */
-    function (Controller) {
+    function (Controller, Datahelper) {
         "use strict";
 
         return Controller.extend("urlaubsplaner.urlaubsplaner.controller.Login", {
@@ -13,45 +13,59 @@ sap.ui.define([
 
             },
             handleClick: function () {
-                //  var oRouter = sap.ui.core.UIComponent.getRouter();
-                //         oRouter.navTo("RouteDashboard");
-                //Test Kommentar für Push
-
+      
                 var sUserEmail = this.byId("userEmailInput").getValue();
                 var sUserPassword = this.byId("userPasswordInput").getValue();
                 var oModel = new sap.ui.model.xml.XMLModel();
                 var that = this;
 
-                console.log("E-Mail: " + sUserEmail, "PW: " + sUserPassword); 
+                var oController = this;
+                var oParams = { "email": sUserEmail, "password": sUserPassword };
+                var sURL = "http://localhost:3000/api/UserDetail";
 
-                var aData = jQuery.ajax({
-                    type: "GET",
-                    contentType: "application/xml",
-                    url: "http://localhost:3000/api/UserDetail",
-                    dataType: "json",
-                    data: $.param({ "email": sUserEmail, "password": sUserPassword }),
-                    async: false,
-                    success: function (data) {
-        
-                        console.log(data);
-
-                        that.getOwnerComponent().getRouter().navTo("RouteDashboard", {
-                            userID: data.userID,
-                            token: data.token
-
-                        });
-                        console.log("Hier müsste die UserID stehen: " + data.userID);
-                         oModel.setData(data);
-                    },
-                    error: function (oResponse) {
-                        
-                        sap.m.MessageToast.show("BenutzerName oder Passwort falsch!");
+                Datahelper.read(sURL, oParams, oController).then(function (oResponse) {
+                    console.warn(oResponse)
+                    that.getOwnerComponent().getRouter().navTo("RouteDashboard", {
+                        userID: oResponse.userID,
+                        token: oResponse.token
+                    });
+                }.bind(this)).catch(function (oError) {
+                    console.log(oError);
+                    if (oError.status === 401) {
+                        MessageToast.show("Deine Sitzung ist abgelaufen");
+                        var oRouter = oController.getOwnerComponent().getRouter();
+                        oRouter.navTo("RouteLogin", {}, true);
                     }
+                    sap.m.MessageToast.show("BenutzerName oder Passwort falsch!");
+                })
 
-                   
-                });
-                console.log(aData);
+
+
+
+
                 this.getView().setModel(oModel);
-            }
+
+
+
+            },
+            onNavBack: function () {
+                var oHistory = History.getInstance();
+                var sPreviousHash = oHistory.getPreviousHash();
+
+                if (sPreviousHash !== undefined) {
+                    window.history.go(-1);
+                } else {
+                    var oRouter = this.getOwnerComponent().getRouter();
+                    oRouter.navTo("overview", {}, true);
+                }
+            },
+            
+            loadData: function () {
+
+            },
+
         });
+
+
+
     });
