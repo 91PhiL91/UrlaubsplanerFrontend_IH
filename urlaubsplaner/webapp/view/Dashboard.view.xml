@@ -1,0 +1,27 @@
+<mvc:View controllerName="urlaubsplaner.urlaubsplaner.controller.Dashboard" xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
+    <Page id="page" showHeader="true" showNavButton="true" title="Nutzerdaten" navButtonPress=".onNavBack">
+	
+        <content>
+            <Panel id="panel">
+			
+			    <HBox id="_IDGenHBox1" class="container">
+				
+				    <VBox class="sapUiSmallMargin">
+	
+                        <Label text = "Guten Tag " />
+                        <Label text = "Urlaubstage " />
+                        <Label text = "Urlaubstage" />
+                        <Label text = "Davon sind  Tage aus dem Vorjahr" />
+                        <Label text = "Es wurden bereitsTage beantragt" />
+                        <Label text="Du besitzt erweiterte Berechtigungen" />
+			
+                    </VBox>
+                </HBox>
+            </Panel>
+			
+
+
+        </content>
+    </Page>
+</mvc:View>

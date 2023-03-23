@@ -1,0 +1,24 @@
+<mvc:View controllerName="urlaubsplaner.urlaubsplaner.controller.Login"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m">
+    <Page id="page" title="{i18n>title}">
+        <content>
+         <FlexBox class="sapUiLargeMarginTopBottom " justifyContent="Center" >
+                <VBox class="sapUiSmallMargin sapUi-Std-PaddingS" backgroundDesign="Solid">
+                    <HBox class="sapUiSmallMargin" justifyContent="Center">
+                        <Avatar displaySize="L" icon="sap-icon://person-placeholder"/>
+                    </HBox>
+                    <Label text="" design="H1" class="customH1class boldFont largeFont" />
+                
+                    <Input id="userEmailInput" type="Text" placeholder="Benutzername" />
+                    <Input id="userPasswordInput" type="Password" placeholder="Passwort" />
+                    <HBox class="sapUiSmallMargin" justifyContent="Center">
+                        <Button text="Login!" press="handleClick" design="Transparent" />
+                    </HBox>
+                </VBox>
+
+                
+            </FlexBox>
+        </content>
+    </Page>
+</mvc:View>
