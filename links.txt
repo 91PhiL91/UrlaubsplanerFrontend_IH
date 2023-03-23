@@ -1,0 +1,13 @@
+
+https://openui5.hana.ondemand.com/api/sap.uxap.ObjectPageHeaderContent#methods/Summary
+
+
+https://www.npmjs.com/search?q=sap.ui.core
+
+
+
+https://ui5.sap.com/test-resources/sap/m/demokit/iconExplorer/webapp/index.html#/overview/SAP-icons/?tab=grid&icon=calendar
+
+
+
+https://ui5.sap.com//#/topic
