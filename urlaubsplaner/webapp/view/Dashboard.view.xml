@@ -1,26 +1,67 @@
 <mvc:View controllerName="urlaubsplaner.urlaubsplaner.controller.Dashboard" xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
-    xmlns="sap.m">
+    xmlns="sap.m" xmlns:unified="sap.ui.unified" xmlns:l="sap.ui.layout" xmlns:core="sap.ui.core">
     <Page id="page" showHeader="true" showNavButton="true" title="Nutzerdaten" navButtonPress=".onNavBack">
-	
+	    
+        
+        
+        
+        <headerContent>
+			<Button icon="sap-icon://task" tooltip="Urlaubsverwalten"  press="vacationHandleClick" />
+			<Button icon="sap-icon://user-edit" tooltip="Mitarbeiterverwaltung" press="employeeHandleClick" />
+			<Button icon="sap-icon://company-view" tooltip="Teams" press="teamHandleClick" />
+			<Button icon="sap-icon://log" tooltip="Logout" press=".onNavBack" />
+		</headerContent>
         <content>
-            <Panel id="panel">
-			
-			    <HBox id="_IDGenHBox1" class="container">
+                <VBox class="sapUiSmallMargin">
 				
-				    <VBox class="sapUiSmallMargin">
-	
-                        <Label text = "Guten Tag " />
-                        <Label text = "Urlaubstage " />
-                        <Label text = "Urlaubstage" />
-                        <Label text = "Davon sind  Tage aus dem Vorjahr" />
-                        <Label text = "Es wurden bereitsTage beantragt" />
-                        <Label text="Du besitzt erweiterte Berechtigungen" />
-			
-                    </VBox>
-                </HBox>
-            </Panel>
-			
+					<Label text = "Guten Tag, {userDetail>/User/firstName} {userDetail>/User/lastName}" />
+					
+				</VBox>
+           	<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Guten Tag" subheader="{userDetail>/User/firstName} {userDetail>/User/lastName}" press="press">
+	            <TileContent >
+    		        
+	            </TileContent>
+            </GenericTile>
+          
+            <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Verbleibenden Urlaubstage des aktuellen Jahres " >
+		        <TileContent >
+			    <NumericContent value="{userDetail>/User/totalVacation}" icon="sap-icon://calendar" withMargin="false" />
+		        </TileContent>
+	        </GenericTile>
+			<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Resturlaub aus dem Vorjahr">
+		            <TileContent >
+			        <NumericContent value="{userDetail>/User/restVacation}" icon="sap-icon://calendar" withMargin="false" />
+		            </TileContent>
+	        </GenericTile>
+				     <Panel>
+				<headerToolbar>
+					<OverflowToolbar>
+						<Title text="Urlaubsplanung"/>
+					</OverflowToolbar>
+				</headerToolbar>
+            <VBox class="sapUiSmallMargin">
+			<IconTabBar
+				expandable="false"
+				
+				id="idIconTabBarNoIcons"
+				class="sapUiResponsiveContentPadding">
+				<items>
+					<IconTabFilter text="Urlaub" key="info">
+						<core:Fragment fragmentName="urlaubsplaner.urlaubsplaner.view.fragments.OwnVacation" type="XML"/>
+					</IconTabFilter>
+					<IconTabFilter text="Mitarbeiter" key="attachments">
+						<core:Fragment fragmentName="urlaubsplaner.urlaubsplaner.view.fragments.TeamVacation" type="XML"/>
+					</IconTabFilter>
+					</items>
+				</IconTabBar>
+				<!-- <core:Fragment fragmentName="urlaubsplaner.urlaubsplaner.view.fragments.EmployeeVacationPC" type="XML"/> -->
+					
+				</VBox>
 
+                </Panel>
+                    
+         
+			
 
         </content>
     </Page>

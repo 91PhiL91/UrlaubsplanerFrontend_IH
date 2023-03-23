@@ -1,0 +1,73 @@
+
+<core:FragmentDefinition 
+    controllerName="urlaubsplaner.urlaubsplaner.controller.Dashboard"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:unified="sap.ui.unified">
+    <PlanningCalendar
+            id="Own"
+            rows="{path: 'vacationKalenderModel>/People'}"
+            appointmentsVisualization="Filled"
+            appointmentSelect="handleAppointmentSelect"
+            showEmptyIntervalHeaders="false"
+            viewKey="D"
+            showWeekNumbers="true">
+        <toolbarContent>
+            <Title text="Urlaub planen" titleStyle="H4"/>
+            <OverflowToolbarButton icon="sap-icon://add" tooltip="Buchen" press="onOpenDialog"/>
+        </toolbarContent>
+        <views>
+            <PlanningCalendarView
+                key="D"
+                intervalType="Day"  
+                description="Wochenansicht"
+                intervalsS="1"
+                intervalsM="3"
+                intervalsL="7"
+                showSubIntervals="false">
+            </PlanningCalendarView>
+            <PlanningCalendarView
+                key="M"
+                intervalType="Month"  
+               
+                description="Jahresansicht"
+                intervalsS="12"
+                intervalsM="12"
+                intervalsL="12"
+                showSubIntervals="false">
+            </PlanningCalendarView>
+        </views>
+        <rows>
+            <PlanningCalendarRow
+                icon="{vacationKalenderModel>pic}"
+                title="{userDetail>/User/firstName} {userDetail>/User/lastName}" 
+                text="Rolle (Muss noch)"
+                appointments="{path : 'vacationKalenderModel>appointments', templateShareable: false}"
+                 intervalHeaders="{path: 'userDetail>headers', templateShareable: false}">
+                <customData>
+                    <core:CustomData key="emp-name" value="{vacationKalenderModel>lastName}" writeToDom="true"/>
+                </customData>
+                <appointments>
+                    <unified:CalendarAppointment
+                        startDate="{vacationKalenderModel>startDate}"
+                        endDate="{vacationKalenderModel>endDate}"
+                        icon="{vacationKalenderModel>pic}"
+                        title="{vacationKalenderModel>titel}"
+                        text="{vacationKalenderModel>status}"
+                        type="{vacationKalenderModel>type}">
+                    </unified:CalendarAppointment>
+                </appointments>
+                <intervalHeaders>
+                    <unified:CalendarAppointment
+                        startDate="{vacationKalenderModel>startDate}"
+                        endDate="{vacationKalenderModel>endDate}"
+                        icon="{vacationKalenderModel>pic}"
+                        title="{vacationKalenderModel>title}"
+                        type="{vacationKalenderModel>type}">
+                    </unified:CalendarAppointment>
+                </intervalHeaders>
+            </PlanningCalendarRow>
+        </rows>
+    </PlanningCalendar>
+
+</core:FragmentDefinition>

@@ -1,0 +1,73 @@
+
+<core:FragmentDefinition 
+    controllerName="urlaubsplaner.urlaubsplaner.controller.Dashboard"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:unified="sap.ui.unified">
+    <PlanningCalendar
+            id="TeamPC"
+            rows="{path: 'oTeamModel>/Team'}"
+            appointmentsVisualization="Filled"
+            appointmentSelect="handleAppointmentSelect"
+            showEmptyIntervalHeaders="false"
+            viewKey="D"
+            showWeekNumbers="true">
+        <toolbarContent>
+            <Title text="Urlaub planen" titleStyle="H4"/>
+            <OverflowToolbarButton icon="sap-icon://add" tooltip="Buchen" press="onOpenDialog"/>
+        </toolbarContent>
+        <views>
+            <PlanningCalendarView
+                key="D"
+                intervalType="Day"  
+                description="Wochenansicht"
+                intervalsS="1"
+                intervalsM="3"
+                intervalsL="7"
+                showSubIntervals="false">
+            </PlanningCalendarView>
+            <PlanningCalendarView
+                key="M"
+                intervalType="Month"  
+                description="Jahresansicht"
+                intervalsS="12"
+                intervalsM="12"
+                intervalsL="12"
+                showSubIntervals="false">
+            </PlanningCalendarView>
+        </views>
+        <rows>
+            <PlanningCalendarRow
+                icon="{oTeamModel>pic}"
+                title="{oTeamModel>vorname} {oTeamModel>nachname}"
+                text="{oTeamModel>role}"
+                appointments="{path : 'oTeamModel>appointments', templateShareable: false}"
+                intervalHeaders="{path: 'oTeamModel>headers', templateShareable: false}">
+                <customData>
+                    <core:CustomData key="emp-name" value="{oTeamModel>name}" writeToDom="true"/>
+                </customData>
+                <appointments>
+                    <unified:CalendarAppointment
+                        startDate="{oTeamModel>startDatum}"
+                        endDate="{oTeamModel>endDatum}"
+                        icon="{oTeamModel>pic}"
+                        title="{oTeamModel>titel}"
+                        text="{oTeamModel>status}"
+                        type="{oTeamModel>type}"
+                        tentative="{oTeamModel>tentative}">
+                    </unified:CalendarAppointment>
+                </appointments>
+                <intervalHeaders>
+                    <unified:CalendarAppointment
+                        startDate="{oTeamModel>startDatum}"
+                        endDate="{oTeamModel>endDatum}"
+                        icon="{oTeamModel>pic}"
+                        title="{oTeamModel>titel}"
+                        type="{oTeamModel>type}">
+                    </unified:CalendarAppointment>
+                </intervalHeaders>
+            </PlanningCalendarRow>
+        </rows>
+    </PlanningCalendar>
+
+</core:FragmentDefinition>
