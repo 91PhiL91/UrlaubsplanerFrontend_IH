@@ -12,11 +12,11 @@
 			<Button icon="sap-icon://log" tooltip="Logout" press=".onNavBack" />
 		</headerContent>
         <content>
-                <VBox class="sapUiSmallMargin">
+                <!-- <VBox class="sapUiSmallMargin">
 				
 					<Label text = "Guten Tag, {userDetail>/User/firstName} {userDetail>/User/lastName}" />
 					
-				</VBox>
+				</VBox> -->
            	<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Guten Tag" subheader="{userDetail>/User/firstName} {userDetail>/User/lastName}" press="press">
 	            <TileContent >
     		        
@@ -31,6 +31,16 @@
 			<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Resturlaub aus dem Vorjahr">
 		            <TileContent >
 			        <NumericContent value="{userDetail>/User/restVacation}" icon="sap-icon://calendar" withMargin="false" />
+		            </TileContent>
+	        </GenericTile>
+			<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Geplante Urlaubstage " >
+		        <TileContent >
+			    <NumericContent value="{userDetail>/User/plannedVacation}" icon="sap-icon://calendar" withMargin="false" />
+		        </TileContent>
+	        </GenericTile>
+			<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Genommene Urlaubstage">
+		            <TileContent >
+			        <NumericContent value="{userDetail>/User/takedVacation}" icon="sap-icon://calendar" withMargin="false" />
 		            </TileContent>
 	        </GenericTile>
 				     <Panel>

@@ -71,7 +71,7 @@ sap.ui.define([
                 var aArray = [];
                 var oController = this;
                 
-                console.warn("LoadData geht los")
+        
 
 
 
@@ -87,11 +87,11 @@ sap.ui.define([
                             console.log(vacationObject);
                             vacationObject.type = "Type05";
                             var dateObject = new Date(vacationObject.endDate);
-                            console.log("EndDate: hallllooooooooooooooooooooooooooo  ");
+                            console.log("EndDate: ");
                             console.log(dateObject);
                             vacationObject.endDate = dateObject;
                             dateObject = new Date(vacationObject.startDate);
-                            console.log("startDate: bbbbbbbbbbbbbyyyyyyyyyyyyeeeeeeeeeee");
+                            console.log("startDate: ");
                             console.log(dateObject);
                             vacationObject.startDate = dateObject;
                         });
@@ -114,7 +114,7 @@ sap.ui.define([
 				}
 			})
 
-debugger;
+
 
 
                 
@@ -270,17 +270,17 @@ debugger;
              },
 
 
-            // setFirstDay: function () {
-            //     var Date = this.getfirstDayOfWeek();
-            //     var oKalender = [];
-            //     // oKalender.push(this.byId("EmployeePC"));
-            //     oKalender.push(this.byId("Own"));
-            //     // oKalender.push(this.byId("TeamPC"));
-            //     oKalender.forEach(element => {
-            //         element.setStartDate(Date);
-            //     });
+            setFirstDay: function () {
+                var Date = this.getfirstDayOfWeek();
+                var oKalender = [];
+                // oKalender.push(this.byId("EmployeePC"));
+                oKalender.push(this.byId("Own"));
+                // oKalender.push(this.byId("TeamPC"));
+                oKalender.forEach(element => {
+                    element.setStartDate(Date);
+                });
 
-            // },
+            },
 
             urlaubPush: function (sUrlaubStart, sUrlaubsEnde, sTitel) {
 
