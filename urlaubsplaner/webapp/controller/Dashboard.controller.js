@@ -81,28 +81,25 @@ sap.ui.define([
 			var sURL = "http://localhost:3000/api/UserById";
                 
 			Datahelper.read(sURL, oParams, oController).then(function(oResponse){
-				console.log(oResponse);
+				
                 console.log("Test Log am Anfang von Datahelper")
                         oResponse.data.appointments.forEach(vacationObject => {
-                            console.log(vacationObject);
                             vacationObject.type = "Type05";
                             var dateObject = new Date(vacationObject.endDate);
-                            console.log("EndDate: ");
-                            console.log(dateObject);
                             vacationObject.endDate = dateObject;
                             dateObject = new Date(vacationObject.startDate);
-                            console.log("startDate: ");
-                            console.log(dateObject);
                             vacationObject.startDate = dateObject;
                         });
                         oModel.setProperty("/User", oResponse.data);
                         oView.setModel(oModel, "userDetail");
+                        console.log("UserdetailModel:")
+                        console.log(oModel);
                         aArray.push(oResponse.data);
                         oKalenderModel.setProperty("/People", aArray);
                         oView.setModel(oKalenderModel, "vacationKalenderModel");
                         console.log("Hier drunte sollte das oKalenderModel ausgegeben werden.")
                         console.log(oKalenderModel);
-                        if(oResponse.data.role === "Teamleiter"){
+                        if(oResponse.data.isSupervisor === true){
                             // oController.loadOwnTeamData(oResponse.data.userID);
                         }
 			}.bind(this)).catch(function(oError){

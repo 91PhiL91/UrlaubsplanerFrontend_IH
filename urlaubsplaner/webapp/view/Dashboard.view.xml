@@ -6,9 +6,9 @@
         
         
         <headerContent>
-			<Button icon="sap-icon://task" tooltip="Urlaubsverwalten"  press="vacationHandleClick" />
-			<Button icon="sap-icon://user-edit" tooltip="Mitarbeiterverwaltung" press="employeeHandleClick" />
-			<Button icon="sap-icon://company-view" tooltip="Teams" press="teamHandleClick" />
+			<Button icon="sap-icon://task" tooltip="Urlaubsverwalten"  press="vacationHandleClick" visible="{= ${userDetail>/User/isAdmin} === true || ${userDetail>/User/isHR} === true || ${userDetail>/User/isSupervisor} === true ? true : false}"/>
+			<Button icon="sap-icon://user-edit" tooltip="Mitarbeiterverwaltung" press="employeeHandleClick" visible="{= ${userDetail>/User/isAdmin} === true || ${userDetail>/User/isHR} === true ? true : false}"/>
+			<Button icon="sap-icon://company-view" tooltip="Teams" press="teamHandleClick"  visible="{= ${userDetail>/User/isAdmin} === true || ${userDetail>/User/isHR} === true ? true : false}"/>
 			<Button icon="sap-icon://log" tooltip="Logout" press=".onNavBack" />
 		</headerContent>
         <content>
