@@ -1,6 +1,6 @@
 <mvc:View controllerName="urlaubsplaner.urlaubsplaner.controller.Dashboard" xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
     xmlns="sap.m" xmlns:unified="sap.ui.unified" xmlns:l="sap.ui.layout" xmlns:core="sap.ui.core">
-    <Page id="page" showHeader="true" showNavButton="true" title="Nutzerdaten" navButtonPress=".onNavBack">
+    <Page id="page" showHeader="true" showNavButton="true" title="Nutzerdaten von {userDetail>/User/firstName} {userDetail>/User/lastName}" navButtonPress=".onNavBack">
 	    
         
         
@@ -12,35 +12,31 @@
 			<Button icon="sap-icon://log" tooltip="Logout" press=".onNavBack" />
 		</headerContent>
         <content>
-                <!-- <VBox class="sapUiSmallMargin">
-				
-					<Label text = "Guten Tag, {userDetail>/User/firstName} {userDetail>/User/lastName}" />
-					
-				</VBox> -->
-           	<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Guten Tag" subheader="{userDetail>/User/firstName} {userDetail>/User/lastName}" press="press">
+                
+           	<!-- <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Guten Tag" subheader="{userDetail>/User/firstName} {userDetail>/User/lastName}" press="press">
 	            <TileContent >
     		        
 	            </TileContent>
-            </GenericTile>
+            </GenericTile> -->
           
             <GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Verbleibenden Urlaubstage des aktuellen Jahres " >
 		        <TileContent >
-			    <NumericContent value="{userDetail>/User/totalVacation}" icon="sap-icon://calendar" withMargin="false" />
+			    	<NumericContent value="{userDetail>/User/totalVacation}" icon="sap-icon://calendar" withMargin="false" />
 		        </TileContent>
 	        </GenericTile>
 			<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Resturlaub aus dem Vorjahr">
 		            <TileContent >
-			        <NumericContent value="{userDetail>/User/restVacation}" icon="sap-icon://calendar" withMargin="false" />
+			        	<NumericContent value="{userDetail>/User/restVacation}" icon="sap-icon://calendar" withMargin="false" />
 		            </TileContent>
 	        </GenericTile>
 			<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Geplante Urlaubstage " >
-		        <TileContent >
-			    <NumericContent value="{userDetail>/User/plannedVacation}" icon="sap-icon://calendar" withMargin="false" />
-		        </TileContent>
+		        	<TileContent >
+			   	 		<NumericContent value="{userDetail>/User/plannedVacation}" icon="sap-icon://calendar" withMargin="false" />
+		       		 </TileContent>
 	        </GenericTile>
 			<GenericTile class="sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout" header="Genommene Urlaubstage">
 		            <TileContent >
-			        <NumericContent value="{userDetail>/User/takedVacation}" icon="sap-icon://calendar" withMargin="false" />
+			        	<NumericContent value="{userDetail>/User/takedVacation}" icon="sap-icon://calendar" withMargin="false" />
 		            </TileContent>
 	        </GenericTile>
 				     <Panel>

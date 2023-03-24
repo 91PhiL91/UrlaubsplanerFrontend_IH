@@ -41,8 +41,8 @@ sap.ui.define([
                 this.userID = oEvent.getParameter("arguments").userID;
                 this.token = oEvent.getParameter("arguments").token;
                 this.teamLeaderID = oEvent.getParameter("arguments").teamLeaderID;
-                console.log("teamLeaderID!" + this.teamLeaderID)
-                console.log(" userID im DashboardController die durch Login übergeben wurde " + this.userID);
+                // console.log("teamLeaderID!" + this.teamLeaderID)
+                // console.log(" userID im DashboardController die durch Login übergeben wurde " + this.userID);
                 if(this.token){
                     this.loadData();
                     this.setFirstDay();
@@ -82,7 +82,7 @@ sap.ui.define([
                 
 			Datahelper.read(sURL, oParams, oController).then(function(oResponse){
 				
-                console.log("Test Log am Anfang von Datahelper")
+                // console.log("Test Log am Anfang von Datahelper")
                         oResponse.data.appointments.forEach(vacationObject => {
                             vacationObject.type = "Type05";
                             var dateObject = new Date(vacationObject.endDate);
@@ -92,13 +92,11 @@ sap.ui.define([
                         });
                         oModel.setProperty("/User", oResponse.data);
                         oView.setModel(oModel, "userDetail");
-                        console.log("UserdetailModel:")
-                        console.log(oModel);
                         aArray.push(oResponse.data);
                         oKalenderModel.setProperty("/People", aArray);
                         oView.setModel(oKalenderModel, "vacationKalenderModel");
-                        console.log("Hier drunte sollte das oKalenderModel ausgegeben werden.")
-                        console.log(oKalenderModel);
+                        // console.log("Hier drunte sollte das oKalenderModel ausgegeben werden.")
+                        // console.log(oKalenderModel);
                         if(oResponse.data.isSupervisor === true){
                             // oController.loadOwnTeamData(oResponse.data.userID);
                         }
@@ -210,8 +208,8 @@ sap.ui.define([
 
             closeDialog: function () {
                 this.byId("vacationPickerDialog").close();
-                this.byId("datePicker").setValue(null);
-                this.byId("datePicker2").setValue(null);
+                this.byId("datePickerStart").setValue(null);
+                this.byId("datePickerEnd").setValue(null);
                 this.byId("InputGrundRequired").setValue(null);
             },
 
@@ -222,45 +220,46 @@ sap.ui.define([
 
                 // POST - /api/urlaub 
 
-                // var sUrlaubStart = this.byId("datePicker").getDateValue();
-                // var sUrlaubEnde = this.byId("datePicker2").getDateValue();
-                // var sTitel = this.byId("InputGrundRequired").getValue();
-                // var today = new Date();
-                // var day = today.getDay();
-                // var iUserRestTage = this.getView().getModel("userDetail").getProperty("/User/restUrlaub");
-                // //Speicher die Zeit zwischen urlaubsStart und urlaubEnde in ms  in diffTage
-                // var diffTage = sUrlaubEnde.getTime() - sUrlaubStart.getTime();
-                // //diffTage wird durch Tag in ms geteilt und der floatwert wird durch Math.floor in eine ganze Zahl konvertiert
-                // var iTage = Math.floor(1 + (diffTage / (24 * 60 * 60 * 1000)));
+                var sVacationStart = this.byId("datePickerStart").getDateValue();
+                var sVacationEnd = this.byId("datePickerEnd").getDateValue();
+                var sTitel = this.byId("InputGrundRequired").getValue();
+                var today = new Date();
+                var day = today.getDay();
+                var iUserRestTage = this.getView().getModel("userDetail").getProperty("/User/totalVacation");
+                //Speicher die Zeit zwischen urlaubsStart und urlaubEnde in ms  in diffTage
+                console.log("Hier müsste dei totalVacation stehten :" + iUserRestTage);
+                var diffTage = sVacationEnd.getTime() - sVacationStart.getTime();
+                //diffTage wird durch Tag in ms geteilt und der floatwert wird durch Math.floor in eine ganze Zahl konvertiert
+                var iTage = Math.floor(1 + (diffTage / (24 * 60 * 60 * 1000)));
 
-                // //Schaue ob beantragte Tage kleinerGleich Restage sind wenn ja dann
-                // if (sUrlaubStart < today) {
+                //Schaue ob beantragte Tage kleinerGleich Restage sind wenn ja dann
+                if (sVacationStart < today) {
 
-                //     MessageToast.show("Dein Urlaub darf nicht in der Vergangenheit liegen!");
-                // }
-                // else if (sUrlaubEnde < today) {
+                    MessageToast.show("Dein Urlaub darf nicht in der Vergangenheit liegen!");
+                }
+                else if (sVacationEnd < today) {
 
-                //     MessageToast.show("Dein Urlaub darf nicht in der Vergangenheit liegen!");
-                // }
-                // else if (sUrlaubEnde < sUrlaubStart) {
+                    MessageToast.show("Dein Urlaub darf nicht in der Vergangenheit liegen!");
+                }
+                else if (sVacationEnd < sVacationStart) {
 
-                //     MessageToast.show("Dein Urlaubs Ende darf nicht vor dem Beginn deines Urlaubs liegen!");
-                // }
-                // else if (iTage <= iUserRestTage) {
+                    MessageToast.show("Dein Urlaubs Ende darf nicht vor dem Beginn deines Urlaubs liegen!");
+                }
+                else if (iTage <= iUserRestTage) {
 
-                //     //UrlaubsVerwaltungDaten
-                //     this.sUrlaubsVerwaltungStart = sUrlaubStart;
-                //     this.sUrlaubsVerwaltungEnde = sUrlaubEnde;
+                    //UrlaubsVerwaltungDaten
+                    this.sUrlaubsVerwaltungStart = sVacationStart;
+                    this.sUrlaubsVerwaltungEnde = sVacationEnd;
 
 
-                //     //Aufruf der update funktion vom Backend  
-                //     this.urlaubPush(sUrlaubStart, sUrlaubEnde, sTitel);
-                // } else {
-                //     //Gebe Fehler Meldung mit Grund aus
-                //     console.log("Error zu wenig UrlaubsTage");
+                    //Aufruf der update funktion vom Backend  
+                    this.vacationPush(sVacationStart, sVacationEnd, sTitel);
+                } else {
+                    //Gebe Fehler Meldung mit Grund aus
+                    console.log("Error zu wenig UrlaubsTage");
                    
-                // }
-                // this.closeDialog();
+                }
+                this.closeDialog();
                 
 
 
@@ -279,19 +278,20 @@ sap.ui.define([
 
             },
 
-            urlaubPush: function (sUrlaubStart, sUrlaubsEnde, sTitel) {
+            vacationPush: function (sVacationStart, sVacationEnd, sTitel) {
 
                 var oUser = this.getView().getModel("userDetail").getProperty("/User");
                 //Wichtig für Anzeige im Kalender (setzt das Ende auch auf 23:59 Uhr an dem Tag)
-                sUrlaubsEnde.setHours(23, 59);
+                sVacationEnd.setHours(23, 59);
 
                 var oAppointment = {
                     pic: "",
                     userID: oUser.userID,
-                    title: sTitel,
-                    start: new Date(sUrlaubStart),
-                    end: new Date(sUrlaubsEnde),
-                    status: "beantragt"
+                    titel: sTitel,
+                    start: new Date(sVacationStart),
+                    end: new Date(sVacationEnd),
+                    status: "beantragt",
+                    isRead: 0
                 }
                 console.log("urlaubsPush oAppointment ausgabe!")
                 console.log(oAppointment);
@@ -299,7 +299,7 @@ sap.ui.define([
                 var oController = this;
                 $.ajax({
                     type: "POST",
-                    url: "http://localhost:3000/api/urlaub",
+                    url: "http://localhost:3000/api/Vacation",
                     dataType: "json",
                     data: $.param({oAppointment, "token" : this.token}),
                     async: true,
