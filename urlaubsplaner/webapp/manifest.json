@@ -90,6 +90,13 @@
           "target": [
             "TargetDashboard"
           ]
+        },
+        {
+          "name": "RouteEmployeeManagment",
+          "pattern": "RouteEmployeeManagment/{userID}/{token}",
+          "target": [
+            "TargetEmployeeManagment"
+          ]
         }
       ],
       "targets": {
@@ -104,6 +111,11 @@
           "viewType": "XML",
           "viewId": "Dashboard",
           "viewName": "Dashboard"
+        },
+        "TargetEmployeeManagment": {
+          "viewType": "XML",
+          "viewId": "EmployeeManagment",
+          "viewName": "EmployeeManagment"
         }
       }
     },

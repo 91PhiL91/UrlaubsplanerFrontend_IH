@@ -39,7 +39,7 @@
         <rows>
             <PlanningCalendarRow
                 icon="{oTeamModel>pic}"
-                title="{oTeamModel>vorname} {oTeamModel>nachname}"
+                title="{oTeamModel>firstName} {oTeamModel>lastName}"
                 text="{oTeamModel>role}"
                 appointments="{path : 'oTeamModel>appointments', templateShareable: false}"
                 intervalHeaders="{path: 'oTeamModel>headers', templateShareable: false}">
@@ -48,8 +48,8 @@
                 </customData>
                 <appointments>
                     <unified:CalendarAppointment
-                        startDate="{oTeamModel>startDatum}"
-                        endDate="{oTeamModel>endDatum}"
+                        startDate="{oTeamModel>startDate}"
+                        endDate="{oTeamModel>endDate}"
                         icon="{oTeamModel>pic}"
                         title="{oTeamModel>titel}"
                         text="{oTeamModel>status}"
@@ -59,8 +59,8 @@
                 </appointments>
                 <intervalHeaders>
                     <unified:CalendarAppointment
-                        startDate="{oTeamModel>startDatum}"
-                        endDate="{oTeamModel>endDatum}"
+                        startDate="{oTeamModel>startDate}"
+                        endDate="{oTeamModel>endDate}"
                         icon="{oTeamModel>pic}"
                         title="{oTeamModel>titel}"
                         type="{oTeamModel>type}">

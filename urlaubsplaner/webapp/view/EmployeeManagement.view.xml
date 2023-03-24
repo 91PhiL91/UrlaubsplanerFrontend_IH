@@ -1,0 +1,161 @@
+<mvc:View controllerName="urlaubsplaner.urlaubsplaner.controller.EmployeeManagment" 
+	xmlns="sap.ui.table"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:u="sap.ui.unified"
+	xmlns:c="sap.ui.core"
+	xmlns:m="sap.m"
+	height="100%">
+	<m:Page
+		showHeader="true" 
+		showNavButton="true" 
+		title="Nutzerdaten" 
+		navButtonPress=".onNavBack"
+		enableScrolling="false"
+		class="sapUiContentPadding">
+		<m:content>
+			<Table
+				id="TeamTable"
+				selectionMode="None"
+				rows="{oTeamModel>/Users}"
+				visibleRowCount="7"
+				ariaLabelledBy="title">
+				<extension>
+					<m:OverflowToolbar style="Clear">
+						<m:Title id="title" text="Mitarbeiter Verwaltung"/>
+						<m:ToolbarSpacer/>
+						<m:Button
+							icon="sap-icon://clear-filter"
+							tooltip="Filter zurücksetzen"
+							press="clearAllFilters"/>
+						<m:Button
+							icon="sap-icon://add-employee"
+							tooltip="Mitarbeiter anlegen"
+							type="Accept"
+							press="onCreateUser"
+							visible="{oTeamModel>/bEdit}"/>
+						<m:Button
+							icon="sap-icon://employee-rejections"
+							tooltip="Mitarbeiter löschen"
+							type="Reject"
+							press="onDeleteFlumbus"
+							visible="{oTeamModel>/bEdit}"/>
+						<m:Button
+							icon="sap-icon://edit"
+							tooltip="Bearbeitungsmodus betreten"
+							press="onEdit"
+							visible="{= ${oTeamModel>/bEdit} === true ? false : true}"/>
+						<m:Button
+							icon="sap-icon://cancel"
+							tooltip="Bearbeitungsmodus beenden"
+							press="onAbortEdit"
+							visible="{oTeamModel>/bEdit}"/>
+					</m:OverflowToolbar>
+				</extension>
+				<columns>
+					<Column width="auto">
+						<m:Label text="ID" />
+						<template>
+							<m:Text text="{oTeamModel>userId}" wrapping="false"/>
+						</template>
+					</Column>
+					<Column
+						id="username"
+						width="auto"
+						sortProperty="username"
+						filterProperty="username">
+						<m:Label text="Benutzername" />
+						<template>
+							<m:Text text="{oTeamModel>username}" wrapping="false" />
+						</template>
+					</Column>
+					<Column
+						id="vorname"
+						width="auto"
+						sortProperty="vorname"
+						filterProperty="vorname">
+						<m:Label text="Vorname" />
+						<template>
+							<m:Text text="{oTeamModel>vorname}" wrapping="false" />
+						</template>
+					</Column>
+					<Column
+						id="nachname"
+						width="auto"
+						sortProperty="nachname"
+						filterProperty="nachname">
+						<m:Label text="Nachname" />
+						<template>
+							<m:Text text="{oTeamModel>nachname}" wrapping="false" />
+						</template>
+					</Column>
+					<Column
+						width="auto"
+						sortProperty="role"
+						filterProperty="role">
+						<m:Label text="Position" />
+						<template>
+							<m:Text text="{oTeamModel>role}" wrapping="false"  />
+						</template>
+					</Column>
+					<Column
+						width="auto"
+						sortProperty="teamName"
+						filterProperty="teamName">
+						<m:Label text="Team" />
+						<template>
+							<m:Text text="{oTeamModel>teamName}" wrapping="false"  />
+						</template>
+					</Column>
+					<Column width="auto"
+					sortProperty="gesUrlaub">
+						<m:Label text="Gesamt Urlaub" />
+						<template>
+							<m:Text text="{oTeamModel>gesUrlaub}" wrapping="false"  />
+						</template>
+					</Column>
+					<Column
+						width="auto"
+						sortProperty="restUrlaub">
+						<m:Label text="Rest Jahr Urlaub" />
+						<template>
+							<m:Text text="{oTeamModel>restUrlaub}" wrapping="false"  />
+						</template>
+					</Column>
+					<Column
+						width="auto"
+						filterProperty="note">
+						<m:Label text="Notiz" />
+						<template>
+							<m:Text text="{oTeamModel>note}" />
+						</template>
+					</Column>
+					<Column
+						visible="{oTeamModel>/bEdit}"
+						id="edit"
+						width="3.5rem">
+						<m:Label text=""/>
+						<template>
+							<m:Button icon="sap-icon://edit"
+							tooltip="Benutzer bearbeiten"
+							press="onEditUser"/>
+						</template>
+					</Column>
+					<Column
+						visible="{oTeamModel>/bEdit}"
+						id="reset"
+						width="3rem">
+						<m:Label text=""/>
+						<template>
+							<m:Button icon="sap-icon://reset"
+							tooltip="Passwort zurücksetzen"
+							press="onResetUserPW"/>
+						</template>
+					</Column>
+				</columns>
+				<footer>
+					<m:OverflowToolbar id="infobar"></m:OverflowToolbar>
+				</footer>
+			</Table>
+		</m:content>
+	</m:Page>
+</mvc:View>

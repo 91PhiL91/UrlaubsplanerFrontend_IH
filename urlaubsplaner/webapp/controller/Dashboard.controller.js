@@ -98,7 +98,7 @@ sap.ui.define([
                         // console.log("Hier drunte sollte das oKalenderModel ausgegeben werden.")
                         // console.log(oKalenderModel);
                         if(oResponse.data.isSupervisor === true){
-                            // oController.loadOwnTeamData(oResponse.data.userID);
+                            oController.loadOwnTeamData(oResponse.data.userID);
                         }
 			}.bind(this)).catch(function(oError){
 				console.log(oError);
@@ -115,52 +115,52 @@ sap.ui.define([
                 
             },
                 
-            // loadOwnTeamData: function(userID) {
-            //     var oView = this.getView();
-            //     var oModel = new sap.ui.model.json.JSONModel();
+            loadOwnTeamData: function(userID) {
+                var oView = this.getView();
+                var oModel = new sap.ui.model.json.JSONModel();
 
 
-            //     var oController = this;
-            //     var oParams = { "token" : this.token, "teamLeaderID": userID };
-			//     var sURL = "http://localhost:3000/api/userTeam";
+                var oController = this;
+                var oParams = { "token" : this.token, "teamLeaderID": userID };
+			    var sURL = "http://localhost:3000/api/UserTeam";
 
 
-            //     Datahelper.read(sURL, oParams, oController).then(function(oResponse){
-            //         oModel.setProperty("/Team", oResponse.data);
-            //         oResponse.data.forEach(element => {
-            //             element.appointments.forEach(vacationObject => {
-            //                 console.log(vacationObject);
-            //                 vacationObject.type = "Type05";
-            //                 var dateObject = new Date(vacationObject.endDate);
-            //                 console.log("EndDate:");
-            //                 console.log(dateObject);
-            //                 vacationObject.endDate = dateObject;
-            //                 dateObject = new Date(vacationObject.startDate);
-            //                 console.log("StartDatum:");
-            //                 console.log(dateObject);
-            //                 vacationObject.startDate = dateObject;
-            //             });
-            //         });
+                Datahelper.read(sURL, oParams, oController).then(function(oResponse){
+                    oModel.setProperty("/Team", oResponse.data);
+                    oResponse.data.forEach(element => {
+                        element.appointments.forEach(vacationObject => {
+                            console.log(vacationObject);
+                            vacationObject.type = "Type05";
+                            var dateObject = new Date(vacationObject.endDate);
+                            console.log("EndDate:");
+                            console.log(dateObject);
+                            vacationObject.endDate = dateObject;
+                            dateObject = new Date(vacationObject.startDate);
+                            console.log("StartDate:");
+                            console.log(dateObject);
+                            vacationObject.startDate = dateObject;
+                        });
+                    });
                    
 
-            //         console.log(oModel);
-            //         oView.setModel(oModel, "oTeamModel");
-            //     }.bind(this)).catch(function(oError){
-            //         console.log(oError);
-            //         if(oResponse.status === 401){
-            //                      MessageToast.show("Deine Sitzung ist abgelaufen");
-            //                      var oRouter = oController.getOwnerComponent().getRouter();
-            //                     oRouter.navTo("RouteLogin", {}, true);
-            //         }
-            //     })
+                    console.log(oModel);
+                    oView.setModel(oModel, "oTeamModel");
+                }.bind(this)).catch(function(oError){
+                    // console.log(oError);
+                    // if(oResponse.status === 401){
+                    //              MessageToast.show("Deine Sitzung ist abgelaufen");
+                    //              var oRouter = oController.getOwnerComponent().getRouter();
+                    //             oRouter.navTo("RouteLogin", {}, true);
+                    // }
+                })
 
 
 
-            // },
+            },
 
             employeeHandleClick: function () {
                 
-                this.getOwnerComponent().getRouter().navTo("RouteEmployees", 
+                this.getOwnerComponent().getRouter().navTo("RouteEmployeeManagment", 
                 {
                     userID : this.userID,
                     token: this.token
@@ -225,12 +225,12 @@ sap.ui.define([
                 var sTitel = this.byId("InputGrundRequired").getValue();
                 var today = new Date();
                 var day = today.getDay();
-                var iUserRestTage = this.getView().getModel("userDetail").getProperty("/User/totalVacation");
+                var iUserTotalVacation = this.getView().getModel("userDetail").getProperty("/User/totalVacation");
                 //Speicher die Zeit zwischen urlaubsStart und urlaubEnde in ms  in diffTage
-                console.log("Hier müsste dei totalVacation stehten :" + iUserRestTage);
-                var diffTage = sVacationEnd.getTime() - sVacationStart.getTime();
+                console.log("Hier müsste dei totalVacation stehten :" + iUserTotalVacation);
+                var diffDays = sVacationEnd.getTime() - sVacationStart.getTime();
                 //diffTage wird durch Tag in ms geteilt und der floatwert wird durch Math.floor in eine ganze Zahl konvertiert
-                var iTage = Math.floor(1 + (diffTage / (24 * 60 * 60 * 1000)));
+                var iDay = Math.floor(1 + (diffDays / (24 * 60 * 60 * 1000)));
 
                 //Schaue ob beantragte Tage kleinerGleich Restage sind wenn ja dann
                 if (sVacationStart < today) {
@@ -245,12 +245,17 @@ sap.ui.define([
 
                     MessageToast.show("Dein Urlaubs Ende darf nicht vor dem Beginn deines Urlaubs liegen!");
                 }
-                else if (iTage <= iUserRestTage) {
+                else if (iDay <= iUserTotalVacation) {
 
                     //UrlaubsVerwaltungDaten
                     this.sUrlaubsVerwaltungStart = sVacationStart;
                     this.sUrlaubsVerwaltungEnde = sVacationEnd;
-
+                    iUserTotalVacation = iUserTotalVacation - iDay;
+                    
+                    
+                    //Noch mal schauen. Weil daten nicht dauerhaft geändert werden.----------------------------------------------------------------------------------------------
+                    console.log("totalVacation - gebuchte Tage" + iUserTotalVacation);
+                    this.getView().getModel("userDetail").setProperty("/User/totalVacation", iUserTotalVacation);
 
                     //Aufruf der update funktion vom Backend  
                     this.vacationPush(sVacationStart, sVacationEnd, sTitel);
