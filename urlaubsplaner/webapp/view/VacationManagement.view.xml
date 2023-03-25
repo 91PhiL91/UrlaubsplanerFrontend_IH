@@ -1,0 +1,65 @@
+<mvc:View controllerName="urlaubsplaner.urlaubsplaner.controller.VacationManagement" xmlns="sap.ui.table" xmlns:mvc="sap.ui.core.mvc" xmlns:u="sap.ui.unified" xmlns:c="sap.ui.core" xmlns:m="sap.m" height="100%">
+    <m:Page enableScrolling="false" class="sapUiContentPadding" showHeader="true" showNavButton="true" title="Urlaubsverwaltung" navButtonPress=".onNavBack">
+        <m:content>
+            <Table id="vacationTable" selectionMode="MultiToggle"  rows="{path: 'oTeamUrlaubsModel>/Urlaube'}" visibleRowCount="7" sort="sortDeliveryDate" ariaLabelledBy="title">
+                <extension>
+                    <m:OverflowToolbar style="Clear">
+                        <m:Title id="title" text="Beantragte Urlaube" />
+                        <m:ToolbarSpacer />
+                        <m:Button id = "editBtn" icon="sap-icon://edit" tooltip="Bearbeiten" press="onEdit" visible="{= ${oTeamUrlaubsModel>/bEdit} === true ? false : true}" />
+                        <m:Button
+							text="Download"
+							press="onExportVacButtonPress"
+							icon="sap-icon://excel-attachment"
+							type="Emphasized"/>
+						<m:Button id = "buchen" icon="sap-icon://accept" tooltip="Urlaub gehnemigen" press="onAccept" visible="{oTeamUrlaubsModel>/bEdit}" />
+						<m:Button id = "ablehnen" icon="sap-icon://decline" tooltip="Urlaub ablehnen" press="onDecline" visible="{oTeamUrlaubsModel>/bEdit}" />
+						<m:Button id = "zurueck" icon="sap-icon://cancel" tooltip="Zurück" press="onAbortEdit" visible="{oTeamUrlaubsModel>/bEdit}" />
+						
+                    </m:OverflowToolbar>
+                </extension>
+                <columns >
+                    <Column width="auto" >
+                        <m:Label text="Mitarbeiter" />
+                        <template>
+                            <m:Link text="{oTeamUrlaubsModel>vorname} {oTeamUrlaubsModel>nachname}" />
+                        </template>
+                    </Column>
+                    <Column id="name" width="auto" sortProperty="name">
+                        <m:Label text="Von" />
+                        <template>
+                            <m:Text text="{oTeamUrlaubsModel>startDatum}" wrapping="false" />
+                        </template>
+                    </Column>
+                    <Column id="categories" width="auto" showSortMenuEntry="false" sortProperty="Category">
+                        <m:Label text="Bis" />
+                        <template>
+                            <m:Text text="{oTeamUrlaubsModel>endDatum}" wrapping="false" />
+                        </template>
+                    </Column>
+                    <Column width="auto">
+                        <m:Label text="Gesamt Urlaub" />
+                        <template>
+                            <m:Text text="Test" wrapping="false" />
+                        </template>
+                    </Column>
+                    <Column id="quantity" width="auto" sortProperty="Quantity">
+                        <m:Label text="Rest Jahr Urlaub" />
+                        <template>
+                            <m:Text text="{oTeamUrlaubsModel>restUrlaub}" wrapping="false" />
+                        </template>
+                    </Column>
+                    <Column id="deliverydate" width="auto" sortProperty="DeliveryDateStr">
+                        <m:Label text="Status" />
+                        <template>
+                            <m:Text text="{oTeamUrlaubsModel>status}" wrapping="false" />
+                        </template>
+                    </Column>
+                </columns>
+                <footer>
+                    <m:OverflowToolbar id="infobar" />
+                </footer>
+            </Table>
+        </m:content>
+    </m:Page>
+</mvc:View>

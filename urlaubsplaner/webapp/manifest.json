@@ -97,6 +97,13 @@
           "target": [
             "TargetEmployeesManagement"
           ]
+        },
+        {
+        "name": "RouteVacationManagement",
+          "pattern": "RouteVacationManagement./{userID}/{token}",
+          "target": [
+            "TargetVacationManagement"
+          ]
         }
       ],
       "targets": {
@@ -116,6 +123,11 @@
           "viewType": "XML",
           "viewId": "EmployeesManagement",
           "viewName": "EmployeesManagement"
+        },
+        "TargetVacationManagement": {
+          "viewType": "XML",
+          "viewId": "VacationManagement",
+          "viewName": "VacationManagement"
         }
       }
     },

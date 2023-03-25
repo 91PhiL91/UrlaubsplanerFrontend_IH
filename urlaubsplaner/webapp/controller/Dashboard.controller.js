@@ -180,7 +180,7 @@ sap.ui.define([
 
             vacationHandleClick: function () {
                 console.log("Button MitarbeiterVerwaltung wurde geklickt!");
-                this.getOwnerComponent().getRouter().navTo("RouteUrlaubsVerwaltung", {
+                this.getOwnerComponent().getRouter().navTo("RouteVacationManagement", {
                     userID: this.userID,
                     token: this.token
                 });
