@@ -1,4 +1,4 @@
-<mvc:View controllerName="urlaubsplaner.urlaubsplaner.controller.EmployeeManagment" 
+<mvc:View controllerName="urlaubsplaner.urlaubsplaner.controller.EmployeesManagement" 
 	xmlns="sap.ui.table"
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns:u="sap.ui.unified"

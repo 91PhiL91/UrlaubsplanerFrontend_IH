@@ -92,10 +92,10 @@
           ]
         },
         {
-          "name": "RouteEmployeeManagment",
-          "pattern": "RouteEmployeeManagment/{userID}/{token}",
+          "name": "RouteEmployeesManagement",
+          "pattern": "RouteEmployeesManagement/{userID}/{token}",
           "target": [
-            "TargetEmployeeManagment"
+            "TargetEmployeesManagement"
           ]
         }
       ],
@@ -112,13 +112,14 @@
           "viewId": "Dashboard",
           "viewName": "Dashboard"
         },
-        "TargetEmployeeManagment": {
+        "TargetEmployeesManagement": {
           "viewType": "XML",
-          "viewId": "EmployeeManagment",
-          "viewName": "EmployeeManagment"
+          "viewId": "EmployeesManagement",
+          "viewName": "EmployeesManagement"
         }
       }
     },
+    
     "rootView": {
       "viewName": "urlaubsplaner.urlaubsplaner.view.App",
       "type": "XML",

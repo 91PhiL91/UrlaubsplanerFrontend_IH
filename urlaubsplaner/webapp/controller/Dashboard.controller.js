@@ -132,12 +132,12 @@ sap.ui.define([
                             console.log(vacationObject);
                             vacationObject.type = "Type05";
                             var dateObject = new Date(vacationObject.endDate);
-                            console.log("EndDate:");
-                            console.log(dateObject);
+                            // console.log("EndDate:");
+                            // console.log(dateObject);
                             vacationObject.endDate = dateObject;
                             dateObject = new Date(vacationObject.startDate);
-                            console.log("StartDate:");
-                            console.log(dateObject);
+                            // console.log("StartDate:");
+                            // console.log(dateObject);
                             vacationObject.startDate = dateObject;
                         });
                     });
@@ -159,13 +159,15 @@ sap.ui.define([
             },
 
             employeeHandleClick: function () {
-                
-                this.getOwnerComponent().getRouter().navTo("RouteEmployeeManagment", 
+                console.log("Der Button MA Verwaltung wurde gedrückt");
+                this.getOwnerComponent().getRouter().navTo("RouteEmployeesManagement", 
                 {
                     userID : this.userID,
                     token: this.token
-                });                       
+                });       debugger;                
             },
+            
+            
             teamHandleClick: function () {
                 
                 this.getOwnerComponent().getRouter().navTo("RouteTeams", 
@@ -177,6 +179,7 @@ sap.ui.define([
 
 
             vacationHandleClick: function () {
+                console.log("Button MitarbeiterVerwaltung wurde geklickt!");
                 this.getOwnerComponent().getRouter().navTo("RouteUrlaubsVerwaltung", {
                     userID: this.userID,
                     token: this.token

@@ -387,7 +387,7 @@ sap.ui.define([
 			  }
 			
 			$.ajax({
-				url: "/api/user",
+				url: "/api/User",
 				method: "POST",
 				data: {
 					username: sUserName,
@@ -465,7 +465,7 @@ sap.ui.define([
 			console.log(oUserData);
 			var oController = this;
 			$.ajax({
-				url: "/api/user",
+				url: "/api/User",
 				method: "PUT",
 				contentType: "application/json",
 				dataType: "json",
