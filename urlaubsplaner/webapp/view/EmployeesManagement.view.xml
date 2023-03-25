@@ -14,9 +14,9 @@
 		class="sapUiContentPadding">
 		<m:content>
 			<Table
-				id="TeamTable"
+				id="EmployeesTable"
 				selectionMode="None"
-				rows="{oTeamModel>/Users}"
+				rows="{oEmployeesModel>/Users}"
 				visibleRowCount="7"
 				ariaLabelledBy="title">
 				<extension>
@@ -32,60 +32,60 @@
 							tooltip="Mitarbeiter anlegen"
 							type="Accept"
 							press="onCreateUser"
-							visible="{oTeamModel>/bEdit}"/>
+							visible="{oEmployeesModel>/bEdit}"/>
 						<m:Button
 							icon="sap-icon://employee-rejections"
 							tooltip="Mitarbeiter löschen"
 							type="Reject"
 							press="onDeleteFlumbus"
-							visible="{oTeamModel>/bEdit}"/>
+							visible="{oEmployeesModel>/bEdit}"/>
 						<m:Button
 							icon="sap-icon://edit"
 							tooltip="Bearbeitungsmodus betreten"
 							press="onEdit"
-							visible="{= ${oTeamModel>/bEdit} === true ? false : true}"/>
+							visible="{= ${oEmployeesModel>/bEdit} === true ? false : true}"/>
 						<m:Button
 							icon="sap-icon://cancel"
 							tooltip="Bearbeitungsmodus beenden"
 							press="onAbortEdit"
-							visible="{oTeamModel>/bEdit}"/>
+							visible="{oEmployeesModel>/bEdit}"/>
 					</m:OverflowToolbar>
 				</extension>
 				<columns>
 					<Column width="auto">
 						<m:Label text="ID" />
 						<template>
-							<m:Text text="{oTeamModel>userId}" wrapping="false"/>
+							<m:Text text="{oEmployeesModel>userID}" wrapping="false"/>
 						</template>
 					</Column>
 					<Column
-						id="username"
+						id="email"
 						width="auto"
-						sortProperty="username"
-						filterProperty="username">
-						<m:Label text="Benutzername" />
+						sortProperty="email"
+						filterProperty="email">
+						<m:Label text="E-Mail Adresse" />
 						<template>
-							<m:Text text="{oTeamModel>username}" wrapping="false" />
+							<m:Text text="{oEmployeesModel>email}" wrapping="false" />
 						</template>
 					</Column>
 					<Column
-						id="vorname"
+						id="firstName"
 						width="auto"
-						sortProperty="vorname"
-						filterProperty="vorname">
+						sortProperty="firstName"
+						filterProperty="firstName">
 						<m:Label text="Vorname" />
 						<template>
-							<m:Text text="{oTeamModel>vorname}" wrapping="false" />
+							<m:Text text="{oEmployeesModel>firstName}" wrapping="false" />
 						</template>
 					</Column>
 					<Column
-						id="nachname"
+						id="lastName"
 						width="auto"
-						sortProperty="nachname"
-						filterProperty="nachname">
+						sortProperty="lastName"
+						filterProperty="lastName">
 						<m:Label text="Nachname" />
 						<template>
-							<m:Text text="{oTeamModel>nachname}" wrapping="false" />
+							<m:Text text="{oEmployeesModel>lastName}" wrapping="false" />
 						</template>
 					</Column>
 					<Column
@@ -94,7 +94,7 @@
 						filterProperty="role">
 						<m:Label text="Position" />
 						<template>
-							<m:Text text="{oTeamModel>role}" wrapping="false"  />
+							<m:Text text="Bleibt erstmal leer" wrapping="false"  />
 						</template>
 					</Column>
 					<Column
@@ -103,22 +103,22 @@
 						filterProperty="teamName">
 						<m:Label text="Team" />
 						<template>
-							<m:Text text="{oTeamModel>teamName}" wrapping="false"  />
+							<m:Text text="{oEmployeesModel>/teamID}" wrapping="false"  />
 						</template>
 					</Column>
 					<Column width="auto"
-					sortProperty="gesUrlaub">
+					sortProperty="totalVacation">
 						<m:Label text="Gesamt Urlaub" />
 						<template>
-							<m:Text text="{oTeamModel>gesUrlaub}" wrapping="false"  />
+							<m:Text text="{oEmployeesModel>totalVacation}" wrapping="false"  />
 						</template>
 					</Column>
 					<Column
 						width="auto"
-						sortProperty="restUrlaub">
-						<m:Label text="Rest Jahr Urlaub" />
+						sortProperty="restVacation">
+						<m:Label text="Resturlaub aus dem Vorjahr" />
 						<template>
-							<m:Text text="{oTeamModel>restUrlaub}" wrapping="false"  />
+							<m:Text text="{oEmployeesModel>restVacation}" wrapping="false"  />
 						</template>
 					</Column>
 					<Column
@@ -126,11 +126,11 @@
 						filterProperty="note">
 						<m:Label text="Notiz" />
 						<template>
-							<m:Text text="{oTeamModel>note}" />
+							<m:Text text="{oEmployeesModel>note}" />
 						</template>
 					</Column>
 					<Column
-						visible="{oTeamModel>/bEdit}"
+						visible="{oEmployeesModel>/bEdit}"
 						id="edit"
 						width="3.5rem">
 						<m:Label text=""/>
@@ -141,7 +141,7 @@
 						</template>
 					</Column>
 					<Column
-						visible="{oTeamModel>/bEdit}"
+						visible="{oEmployeesModel>/bEdit}"
 						id="reset"
 						width="3rem">
 						<m:Label text=""/>

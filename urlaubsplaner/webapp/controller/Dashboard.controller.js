@@ -116,43 +116,43 @@ sap.ui.define([
             },
                 
             loadOwnTeamData: function(userID) {
-                var oView = this.getView();
-                var oModel = new sap.ui.model.json.JSONModel();
+                // var oView = this.getView();
+                // var oModel = new sap.ui.model.json.JSONModel();
 
 
-                var oController = this;
-                var oParams = { "token" : this.token, "teamLeaderID": userID };
-			    var sURL = "http://localhost:3000/api/UserTeam";
+                // var oController = this;
+                // var oParams = { "token" : this.token, "teamLeaderID": userID };
+			    // var sURL = "http://localhost:3000/api/UserTeam";
 
 
-                Datahelper.read(sURL, oParams, oController).then(function(oResponse){
-                    oModel.setProperty("/Team", oResponse.data);
-                    oResponse.data.forEach(element => {
-                        element.appointments.forEach(vacationObject => {
-                            console.log(vacationObject);
-                            vacationObject.type = "Type05";
-                            var dateObject = new Date(vacationObject.endDate);
-                            // console.log("EndDate:");
-                            // console.log(dateObject);
-                            vacationObject.endDate = dateObject;
-                            dateObject = new Date(vacationObject.startDate);
-                            // console.log("StartDate:");
-                            // console.log(dateObject);
-                            vacationObject.startDate = dateObject;
-                        });
-                    });
+                // Datahelper.read(sURL, oParams, oController).then(function(oResponse){
+                //     oModel.setProperty("/Team", oResponse.data);
+                //     oResponse.data.forEach(element => {
+                //         element.appointments.forEach(vacationObject => {
+                //             console.log(vacationObject);
+                //             vacationObject.type = "Type05";
+                //             var dateObject = new Date(vacationObject.endDate);
+                //             // console.log("EndDate:");
+                //             // console.log(dateObject);
+                //             vacationObject.endDate = dateObject;
+                //             dateObject = new Date(vacationObject.startDate);
+                //             // console.log("StartDate:");
+                //             // console.log(dateObject);
+                //             vacationObject.startDate = dateObject;
+                //         });
+                //     });
                    
 
-                    console.log(oModel);
-                    oView.setModel(oModel, "oTeamModel");
-                }.bind(this)).catch(function(oError){
-                    // console.log(oError);
-                    // if(oResponse.status === 401){
-                    //              MessageToast.show("Deine Sitzung ist abgelaufen");
-                    //              var oRouter = oController.getOwnerComponent().getRouter();
-                    //             oRouter.navTo("RouteLogin", {}, true);
-                    // }
-                })
+                //     console.log(oModel);
+                //     oView.setModel(oModel, "oTeamModel");
+                // }.bind(this)).catch(function(oError){
+                //     // console.log(oError);
+                //     // if(oResponse.status === 401){
+                //     //              MessageToast.show("Deine Sitzung ist abgelaufen");
+                //     //              var oRouter = oController.getOwnerComponent().getRouter();
+                //     //             oRouter.navTo("RouteLogin", {}, true);
+                //     // }
+                // })
 
 
 
@@ -164,7 +164,7 @@ sap.ui.define([
                 {
                     userID : this.userID,
                     token: this.token
-                });       debugger;                
+                });                    
             },
             
             

@@ -7,11 +7,11 @@ sap.ui.define([
 	"sap/m/ToolbarSpacer",
 	"sap/ui/table/library",
 	"sap/ui/thirdparty/jquery",
-    "sap/ui/core/Fragment",
+	"sap/ui/core/Fragment",
 	"sap/m/MessageToast",
 	"./helper/ResponseStatusHelper",
 	"./helper/DataHelper"
-], function(Log, Controller, Sorter, JSONModel, DateFormat, ToolbarSpacer, library, jQuery, Fragment, MessageToast, ResponseStatusHelper, Datahelper) {
+], function (Log, Controller, Sorter, JSONModel, DateFormat, ToolbarSpacer, library, jQuery, Fragment, MessageToast, ResponseStatusHelper, Datahelper) {
 	"use strict";
 
 	// shortcut for sap.ui.table.SortOrder
@@ -19,12 +19,12 @@ sap.ui.define([
 
 	return Controller.extend("urlaubsplaner.urlaubsplaner.controller.Dashboard", {
 
-		onInit : function() {
+		onInit: function () {
 			this.oOwnerComponent = this.getOwnerComponent();
 			this.oRouter = this.oOwnerComponent.getRouter();
 			this.oRouter.attachRouteMatched(this.onRouteMatched, this);
-			
-			
+
+
 			var oView = this.getView();
 			oView.setModel(new JSONModel({
 				globalFilter: "",
@@ -39,18 +39,18 @@ sap.ui.define([
 
 		onRouteMatched: function (oEvent) {
 
-            this.token = oEvent.getParameter("arguments").token;
+			this.token = oEvent.getParameter("arguments").token;
 			this.userID = oEvent.getParameter("arguments").userID;
 			var oController = this;
 
 
-			if(this.token){
+			if (this.token) {
 				var oModel = new sap.ui.model.json.JSONModel();
 				var oView = this.getView();
 				oModel.setProperty("/bEdit", false);
-				oView.setModel(oModel, "oTeamModel");
+				oView.setModel(oModel, "oEmployeesModel");
 				this.loadData();
-			}else{
+			} else {
 				MessageToast.show("Deine Sitzung ist abgelaufen");
 				var oRouter = oController.getOwnerComponent().getRouter();
 				oRouter.navTo("RouteLogin", {}, true);
@@ -60,8 +60,8 @@ sap.ui.define([
 			this.getOwnerComponent().getRouter().navTo("RouteDashboard", {
 				userID: this.userID,
 				token: this.token
-				
-			   });
+
+			});
 		},
 		loadData: function () {
 
@@ -69,52 +69,33 @@ sap.ui.define([
 			//Aufruf GET /Api/User
 
 			var oView = this.getView();
-			var oModel = oView.getModel("oTeamModel");
+			var oModel = oView.getModel("oEmployeesModel");
 			var oController = this;
+			var aArray = [];
 
 
 
+			var oParams = { "token": this.token };
+			var sURL = "http://localhost:3000/api/User";
 
-			// var oParams = { "token" : this.token};
-			// var sURL = "http://localhost:3000/api/User";
-
-			// Datahelper.read(sURL, oParams, oController).then(function(oResponse){
-			// 	console.log(oResponse);
-			// 	oModel.setProperty("/Users", oResponse.users)
-			// 	oView.setModel(oModel, "oTeamModel");
-			// 	oController.loadTeamData();
-			// }.bind(this)).catch(function(oError){
-			// 	console.log(oError);
-			// 	if(oResponse.status === 401){
-			// 	 			MessageToast.show("Deine Sitzung ist abgelaufen");
-			// 	 			var oRouter = oController.getOwnerComponent().getRouter();
-			// 				oRouter.navTo("RouteLogin", {}, true);
-			// 	}
-			// })
-
-
-
-			jQuery.ajax({
-				type: "GET",
-				contentType: "application/xml",
-				url: "http://localhost:3000/api/User",
-				dataType: "json",
-				data: $.param({ "token" : this.token}),
-				async: true,
-				success: function (oResponse) {
-					console.log(oResponse);
-					oModel.setProperty("/Users", oResponse.users)
-					oView.setModel(oModel, "oTeamModel");
-					oController.loadTeamData();
-				},
-				error: function (oResponse) {
-					if(oResponse.status === 401){
-						MessageToast.show("Deine Sitzung ist abgelaufen");
-						var oRouter = oController.getOwnerComponent().getRouter();
-						oRouter.navTo("RouteLogin", {}, true);
-					}
+			Datahelper.read(sURL, oParams, oController).then(function (oResponse) {
+				console.log(oResponse);
+				oModel.setProperty("/Users", oResponse.allUsers)
+				oView.setModel(oModel, "oEmployeesModel");
+				
+				//oController.loadTeamData();
+			}.bind(this)).catch(function (oError) {
+				console.log(oError);
+				if (oResponse.status === 401) {
+					MessageToast.show("Deine Sitzung ist abgelaufen");
+					var oRouter = oController.getOwnerComponent().getRouter();
+					oRouter.navTo("RouteLogin", {}, true);
 				}
 			})
+
+
+
+			
 
 		},
 
@@ -123,32 +104,32 @@ sap.ui.define([
 
 			//Aufruf  POST  /api/user
 
-			
+
 		},
 
 
-		clearAllSortings : function(oEvent) {
-			var oTable = this.byId("TeamTable");
+		clearAllSortings: function (oEvent) {
+			var oTable = this.byId("EmployeesTable");
 			oTable.getBinding().sort(null);
 			this._resetSortingState();
 		},
 
 		onEdit: function () {
-			this.byId("TeamTable").setSelectionMode("MultiToggle");
-			this.getView().getModel("oTeamModel").setProperty("/bEdit", true);
-			
+			this.byId("EmployeesTable").setSelectionMode("MultiToggle");
+			this.getView().getModel("oEmployeesModel").setProperty("/bEdit", true);
+
 
 		},
 
 		onAbortEdit: function () {
-			this.byId("TeamTable").setSelectionMode("None");
-			this.getView().getModel("oTeamModel").setProperty("/bEdit", false);
-			
+			this.byId("EmployeesTable").setSelectionMode("None");
+			this.getView().getModel("oEmployeesModel").setProperty("/bEdit", false);
+
 
 		},
 
 		deleteEmployee: function () {
-			var oTable = this.byId("oTeamModel");
+			var oTable = this.byId("oEmployeesModel");
 			var aSelectedIndices = oTable.getSelectedIndices();
 			var aUrlaube = [];
 			for (var i = 0; i < aSelectedIndices.length; i++) {
@@ -158,16 +139,16 @@ sap.ui.define([
 				aUrlaube.push(oSelectedData);
 			}
 			this.pushUrlaubData(aUrlaube);
-			
+
 
 		},
-		
 
-		
+
+
 		onEditUser: function (e) {
 			var oView = this.getView();
-			var sPath = e.getSource().getBindingContext('oTeamModel').getPath();
-			var oModel = this.getView().getModel('oTeamModel');
+			var sPath = e.getSource().getBindingContext('oEmployeesModel').getPath();
+			var oModel = this.getView().getModel('oEmployeesModel');
 			var oUserData = oModel.getProperty(sPath);
 			var oEditModel = new sap.ui.model.json.JSONModel();
 			switch (oUserData.role) {
@@ -190,7 +171,7 @@ sap.ui.define([
 			oView.setModel(oEditModel, "oEditModel");
 			console.log(oEditModel);
 			this.openDialog();
-			
+
 		},
 
 
@@ -200,66 +181,69 @@ sap.ui.define([
 		},
 
 
-		onDeleteFlumbus: function(){
+		onDeleteFlumbus: function () {
 
 
-					var oTable = this.byId("TeamTable");
-					var aSelectedIndices = oTable.getSelectedIndices();
-					var aEmployeesSelected = [];
-					for (var i = 0; i < aSelectedIndices.length; i++) {
-						var oSelectedContext = oTable.getContextByIndex(aSelectedIndices[i]);
-						var oSelectedData = oSelectedContext.getObject();
-						aEmployeesSelected.push(oSelectedData);
-		
+			var oTable = this.byId("EmployeesTable");
+			var aSelectedIndices = oTable.getSelectedIndices();
+			var aEmployeesSelected = [];
+			for (var i = 0; i < aSelectedIndices.length; i++) {
+				var oSelectedContext = oTable.getContextByIndex(aSelectedIndices[i]);
+				var oSelectedData = oSelectedContext.getObject();
+				aEmployeesSelected.push(oSelectedData);
+
+			}
+			console.warn("Grungo")
+			console.log(aEmployeesSelected)
+			var oController = this;
+			aEmployeesSelected.forEach(User => {
+				jQuery.ajax({
+					type: "DELETE",
+					contentType: "application/json",
+					url: "http://localhost:3000/api/User",
+					dataType: "json",
+					data: JSON.stringify({ "userID": User.userID, "token": this.token }),
+					async: true,
+					success: function (oResponse) {
+						sap.m.MessageToast.show("Update erfolgreich!")
+						oController.loadData();
+					},
+					error: function (oResponse) {
+						ResponseStatusHelper.handleStatusCode(oResponse, oController);
+						oController.loadData();
 					}
-					console.warn("Grungo")
-					console.log(aEmployeesSelected)
-					var oController = this;
-					aEmployeesSelected.forEach(User => {
-						jQuery.ajax({
-							type: "DELETE",
-							contentType: "application/json",
-							url: "http://localhost:3000/api/User",
-							dataType: "json",
-							data: JSON.stringify({ "userID": User.userID, "token" : this.token}),
-							async: true,
-							success: function (oResponse) {
-								sap.m.MessageToast.show("Update erfolgreich!")
-								oController.loadData();
-							},
-							error: function (oResponse) {
-								ResponseStatusHelper.handleStatusCode(oResponse,oController);
-								oController.loadData();
-							}
-						})})
-
-			},
-
-
-		loadTeamData: function(){
-			var oModel = this.getView().getModel("oTeamModel");
-
-			var oModel = this.getView().getModel("oTeamModel");
-			jQuery.ajax({
-				type: "GET",
-				contentType: "application/json",
-				url: "http://localhost:3000/api/Team",
-				data: $.param({ "token" : this.token}),
-				dataType: "json",
-				async: true,
-				success: function (oResponse) {
-					console.log("Team Daten geladen!");
-					oModel.setProperty("/Teams", oResponse)
-				},
-				error: function (oResponse) {
-					console.log(oResponse);
-					if(oResponse.status === 401){
-						MessageToast.show("Deine Sitzung ist abgelaufen");
-						var oRouter = oController.getOwnerComponent().getRouter();
-						oRouter.navTo("RouteLogin", {}, true);
-					}
-				}
+				})
 			})
+
+		},
+
+
+		loadTeamData: function () {
+
+			console.log("loadTeamData sollte hier stattfinden. doch // ");
+			// var oModel = this.getView().getModel("oEmployeesModel");
+
+			// var oModel = this.getView().getModel("oEmployeesModel");
+			// jQuery.ajax({
+			// 	type: "GET",
+			// 	contentType: "application/json",
+			// 	url: "http://localhost:3000/api/Team",
+			// 	data: $.param({ "token" : this.token}),
+			// 	dataType: "json",
+			// 	async: true,
+			// 	success: function (oResponse) {
+			// 		console.log("Team Daten geladen!");
+			// 		oModel.setProperty("/Teams", oResponse)
+			// 	},
+			// 	error: function (oResponse) {
+			// 		console.log(oResponse);
+			// 		if(oResponse.status === 401){
+			// 			MessageToast.show("Deine Sitzung ist abgelaufen");
+			// 			var oRouter = oController.getOwnerComponent().getRouter();
+			// 			oRouter.navTo("RouteLogin", {}, true);
+			// 		}
+			// 	}
+			// })
 
 
 
@@ -267,7 +251,7 @@ sap.ui.define([
 
 
 
-		openDialog: function(){
+		openDialog: function () {
 			var oView = this.getView();
 			if (!this.byId("EmployeeEditDialog")) {
 				// load asynchronous XML fragment
@@ -286,7 +270,7 @@ sap.ui.define([
 		},
 
 
-		openCreateDialog: function(){
+		openCreateDialog: function () {
 			var oView = this.getView();
 			if (!this.byId("EmployeeCreateDialog")) {
 				// load asynchronous XML fragment
@@ -304,17 +288,17 @@ sap.ui.define([
 			}
 		},
 
-		sortCategories : function(oEvent) {
+		sortCategories: function (oEvent) {
 			var oView = this.getView();
-			var oTable = oView.byId("TeamTable");
+			var oTable = oView.byId("EmployeesTable");
 			var oCategoriesColumn = oView.byId("categories");
 
 			oTable.sort(oCategoriesColumn, this._bSortColumnDescending ? SortOrder.Descending : SortOrder.Ascending, /*extend existing sorting*/true);
 			this._bSortColumnDescending = !this._bSortColumnDescending;
 		},
 
-		clearAllFilters: function(oEvent) {
-			var oTable = this.byId("TeamTable");
+		clearAllFilters: function (oEvent) {
+			var oTable = this.byId("EmployeesTable");
 
 			var oUiModel = this.getView().getModel("ui");
 			oUiModel.setProperty("/globalFilter", "");
@@ -329,17 +313,17 @@ sap.ui.define([
 				oTable.filter(aColumns[i], null);
 			}
 		},
-		_filter: function() {
+		_filter: function () {
 			var oFilter = null;
 
-			this.byId("TeamTable").getBinding().filter(oFilter, "Application");
+			this.byId("EmployeesTable").getBinding().filter(oFilter, "Application");
 		},
 
-	
-		closeEditDialog: function(){
+
+		closeEditDialog: function () {
 			this.byId("EmployeeEditDialog").close();
 		},
-		closeCreateDialog: function(){
+		closeCreateDialog: function () {
 			var oView = this.getView();
 			this.byId("EmployeeCreateDialog").close();
 			oView.byId("EmployeeCreateFirstname").setValue("");
@@ -353,13 +337,13 @@ sap.ui.define([
 		},
 
 
-		firstUp: function(oFlum){
+		firstUp: function (oFlum) {
 			var uncap = oFlum.toLowerCase();
 			var cap = uncap.charAt(0).toUpperCase() + uncap.slice(1);
 			return cap;
 		},
 
-		createEmployee: function() {
+		createEmployee: function () {
 			var oView = this.getView();
 			var oController = this;
 			var sUserName = oView.byId("EmployeeCreateUserName").getValue();
@@ -384,8 +368,8 @@ sap.ui.define([
 			if (!sGesamtUrlaub) {
 				sap.m.MessageToast.show("Bitte geben Sie den Gesamturlaub an.");
 				return;
-			  }
-			
+			}
+
 			$.ajax({
 				url: "/api/User",
 				method: "POST",
@@ -401,22 +385,22 @@ sap.ui.define([
 					token: this.token
 
 				},
-				success: function(oResponse) {
+				success: function (oResponse) {
 					console.log("Erfolgreich erstellt");
 					oController.loadData();
 				},
-				error: function(oResponse) {
+				error: function (oResponse) {
 					console.error("Das hat leider nicht geklappt");
-					
+
 					oController.loadData();
 				}
 			});
-		
+
 			this.closeCreateDialog();
 		},
 
 
-		editEmployee: function() {
+		editEmployee: function () {
 			var oView = this.getView();
 			var oController = this;
 			var oEditEmployee = oView.getModel("oEditModel").getProperty("/EditUser");
@@ -431,36 +415,36 @@ sap.ui.define([
 				data: JSON.stringify({
 					username: oEditEmployee.username,
 					vorname: oEditEmployee.vorname,
-					nachname:  oEditEmployee.nachname,
-					role:  sRole,
+					nachname: oEditEmployee.nachname,
+					role: sRole,
 					restUrlaub: oEditEmployee.restUrlaub,
-					gesUrlaub:  oEditEmployee.gesUrlaub,
-					note:  oEditEmployee.note,
-					teamId:  oEditEmployee.teamId,
+					gesUrlaub: oEditEmployee.gesUrlaub,
+					note: oEditEmployee.note,
+					teamId: oEditEmployee.teamId,
 					userID: oEditEmployee.userID,
 					token: this.token
 				}),
-				success: function() {
+				success: function () {
 					console.log("Erfolgreich überarbeitet");
 					oView.getModel("oEditModel").setProperty("/EditUser", null);
 					oController.loadData();
 				},
-				error: function(oResponse) {
+				error: function (oResponse) {
 
-					ResponseStatusHelper.handleStatusCode(oResponse,oController);
+					ResponseStatusHelper.handleStatusCode(oResponse, oController);
 					oView.getModel("oEditModel").setProperty("/EditUser", null);
 					oController.loadData();
-					
+
 				}
 
 			});
-		
+
 			this.closeEditDialog();
 		},
 
-		onResetUserPW: function(e){
-			var sPath = e.getSource().getBindingContext('oTeamModel').getPath();
-			var oModel = this.getView().getModel('oTeamModel');
+		onResetUserPW: function (e) {
+			var sPath = e.getSource().getBindingContext('oEmployeesModel').getPath();
+			var oModel = this.getView().getModel('oEmployeesModel');
 			var oUserData = oModel.getProperty(sPath);
 			console.log(oUserData);
 			var oController = this;
@@ -475,37 +459,37 @@ sap.ui.define([
 					passwort: "ABC123",
 					token: this.token
 				}),
-				success: function() {
-					sap.m.MessageToast.show(`Passwort von User ${ oUserData.username } wurde auf das Standardpasswort zurückgesetzt.`);
+				success: function () {
+					sap.m.MessageToast.show(`Passwort von User ${oUserData.username} wurde auf das Standardpasswort zurückgesetzt.`);
 					oController.loadData();
 				},
-				error: function(oResponse) {
+				error: function (oResponse) {
 					console.log(oResponse);
-					if(oResponse.status === 200){
-						sap.m.MessageToast.show(`Passwort von User ${ oUserData.username } wurde auf das Standardpasswort zurückgesetzt.`);
-					}else{
-						if(oResponse.status === 401){
-                            MessageToast.show("Deine Sitzung ist abgelaufen");
-                            var oRouter = oController.getOwnerComponent().getRouter();
-                            oRouter.navTo("RouteLogin", {}, true);
-                        }
-						sap.m.MessageToast.show(`Passwort von User ${ oUserData.username } konnte nicht zurückgesetzt werden!`);
+					if (oResponse.status === 200) {
+						sap.m.MessageToast.show(`Passwort von User ${oUserData.username} wurde auf das Standardpasswort zurückgesetzt.`);
+					} else {
+						if (oResponse.status === 401) {
+							MessageToast.show("Deine Sitzung ist abgelaufen");
+							var oRouter = oController.getOwnerComponent().getRouter();
+							oRouter.navTo("RouteLogin", {}, true);
+						}
+						sap.m.MessageToast.show(`Passwort von User ${oUserData.username} konnte nicht zurückgesetzt werden!`);
 					}
-					
+
 					oController.loadData();
 				}
 			});
 
 		},
 
-		sortCategoriesAndName : function(oEvent){
+		sortCategoriesAndName: function (oEvent) {
 			var oView = this.getView();
-			var oTable = oView.byId("TeamTable");
+			var oTable = oView.byId("EmployeesTable");
 			oTable.sort(oView.byId("categories"), SortOrder.Ascending, false);
 			oTable.sort(oView.byId("name"), SortOrder.Ascending, true);
 		},
 
-		sortDeliveryDate : function(oEvent) {
+		sortDeliveryDate: function (oEvent) {
 			var oCurrentColumn = oEvent.getParameter("column");
 			var oDeliveryDateColumn = this.byId("deliverydate");
 			if (oCurrentColumn != oDeliveryDateColumn) {
@@ -516,7 +500,7 @@ sap.ui.define([
 			oEvent.preventDefault();
 
 			var sOrder = oEvent.getParameter("sortOrder");
-			var oDateFormat = DateFormat.getDateInstance({pattern: "dd/MM/yyyy"});
+			var oDateFormat = DateFormat.getDateInstance({ pattern: "dd/MM/yyyy" });
 
 			this._resetSortingState(); //No multi-column sorting
 			oDeliveryDateColumn.setSorted(true);
@@ -524,7 +508,7 @@ sap.ui.define([
 
 			var oSorter = new Sorter(oDeliveryDateColumn.getSortProperty(), sOrder === SortOrder.Descending);
 			//The date data in the JSON model is string based. For a proper sorting the compare function needs to be customized.
-			oSorter.fnCompare = function(a, b) {
+			oSorter.fnCompare = function (a, b) {
 				if (b == null) {
 					return -1;
 				}
@@ -544,11 +528,11 @@ sap.ui.define([
 				return 0;
 			};
 
-			this.byId("TeamTable").getBinding().sort(oSorter);
+			this.byId("EmployeesTable").getBinding().sort(oSorter);
 		},
 
-		_resetSortingState : function() {
-			var oTable = this.byId("TeamTable");
+		_resetSortingState: function () {
+			var oTable = this.byId("EmployeesTable");
 			var aColumns = oTable.getColumns();
 			for (var i = 0; i < aColumns.length; i++) {
 				aColumns[i].setSorted(false);

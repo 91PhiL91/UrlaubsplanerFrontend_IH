@@ -1,0 +1,93 @@
+<core:FragmentDefinition 
+    controllerName="urlaubsplaner.urlaubsplaner.controller.EmployeesManagement"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core">
+
+    <Dialog id="EmployeeCreateDialog" title="Mitarbeiter anlegen">
+    <VBox class="sapUiSmallMargin">
+		<f:Form id="FormCreate34"
+			editable="true">
+			<f:layout>
+				<f:ResponsiveGridLayout
+					labelSpanXL="3"
+					labelSpanL="3"
+					labelSpanM="3"
+					labelSpanS="12"
+					adjustLabelSpan="false"
+					emptySpanXL="4"
+					emptySpanL="4"
+					emptySpanM="4"
+					emptySpanS="0"
+					columnsXL="1"
+					columnsL="1"
+					columnsM="1"
+					singleContainerFullSize="false" />
+			</f:layout>
+			<f:formContainers>
+				<f:FormContainer>
+					<f:formElements>
+						<f:FormElement label="Benutzername">
+							<f:fields>
+								<Input id="EmployeeCreateUserName"/>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Vorname">
+							<f:fields>
+								<Input id="EmployeeCreateFirstname"/>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Nachname">
+							<f:fields>
+								<Input id="EmployeeCreateLastname"/>
+							</f:fields>
+						</f:FormElement>
+                        <f:FormElement label="Role">
+							<f:fields>
+								<Select id="EmployeeCreateRole">
+									<items>
+                                        <core:Item text="Mitarbeiter" key="MA"/>
+										<core:Item text="Teamleiter" key="TL"/>
+										<core:Item text="Backoffice" key="BO"/>
+									</items>
+								</Select>
+							</f:fields>
+						</f:FormElement>
+                        <f:FormElement label="Team">
+							<f:fields>
+								<Select id="EmployeeCreateTeam"
+                                    items="{
+                                        path: 'oTeamModel>/Teams'
+                                    }">
+                                    <core:Item key="{oTeamModel>teamId}" text="{oTeamModel>teamName}" />
+                                </Select>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Gesamt Urlaub">
+							<f:fields>
+								<Input id="EmployeeCreateVacation" type="Number" value="0" valueState="{= ${EmployeeCreateVacation}.getValue() ? 'None' : 'Error' }" valueStateText="Bitte geben Sie den Gesamturlaub an.">
+                                </Input>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Notiz">
+							<f:fields>
+								<Input id="EmployeeCreateNote">
+								</Input>
+							</f:fields>
+						</f:FormElement>
+					</f:formElements>
+				</f:FormContainer>
+			</f:formContainers>
+		</f:Form>
+	</VBox>
+	<endButton>
+            <Button text="Anlegen" press=".createEmployee" tooltip="Drücke hier um den Mitarbeiter anzulegen" type="Accept"/>
+        </endButton>
+
+        <beginButton>
+            <Button text="Abbrechen" press=".closeCreateDialog" tooltip="Drücke hier um abzubrechen" type="Reject"/>
+        </beginButton>
+    </Dialog>
+
+    </core:FragmentDefinition>

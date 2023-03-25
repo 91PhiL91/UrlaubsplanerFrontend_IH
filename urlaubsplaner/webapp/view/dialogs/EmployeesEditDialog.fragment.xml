@@ -1,0 +1,101 @@
+<core:FragmentDefinition 
+    controllerName="urlaubsplaner.urlaubsplaner.controller.EmployeesManagement"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core">
+
+    <Dialog id="EmployeeEditDialog" title="Mitarbeiter bearbeiten">
+    <VBox class="sapUiSmallMargin">
+		<f:Form id="FormChange354434"
+			editable="true">
+			<f:layout>
+				<f:ResponsiveGridLayout
+					labelSpanXL="3"
+					labelSpanL="3"
+					labelSpanM="3"
+					labelSpanS="12"
+					adjustLabelSpan="false"
+					emptySpanXL="4"
+					emptySpanL="4"
+					emptySpanM="4"
+					emptySpanS="0"
+					columnsXL="1"
+					columnsL="1"
+					columnsM="1"
+					singleContainerFullSize="false" />
+			</f:layout>
+			<f:formContainers>
+				<f:FormContainer>
+					<f:formElements>
+						<f:FormElement label="Benutzername">
+							<f:fields>
+								<Input value="{oEditModel>/EditUser/username}" id="EmployeeEditUserName"/>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Vorname">
+							<f:fields>
+								<Input value="{oEditModel>/EditUser/vorname}" id="EmployeeEditFirstName"/>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Nachname">
+							<f:fields>
+								<Input value="{oEditModel>/EditUser/nachname}" id="EmployeeEditLastName"/>
+							</f:fields>
+						</f:FormElement>
+                        <f:FormElement label="Role">
+							<f:fields>
+								<Select id="EmployeeEditRole" selectedKey="{oEditModel>/EditUser/rolekey}">
+									<items>
+										<core:Item text="Mitarbeiter" key="MA"/>
+										<core:Item text="Teamleiter" key="TL"/>
+										<core:Item text="Backoffice" key="BO"/>
+										<core:Item text="Admin" key="AD"/>
+									</items>
+								</Select>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Team">
+							<f:fields>
+								<Select id="EmployeeEditTeam"
+									selectedKey="{oEditModel>/EditUser/teamId}"
+                                    items="{
+                                        path: 'oTeamModel>/Teams'
+                                    }">
+                                    <core:Item key="{oTeamModel>teamId}" text="{oTeamModel>teamName}" />
+                                </Select>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Gesamt Urlaub">
+							<f:fields>
+								<Input id="EmployeeEditVacation" value="{oEditModel>/EditUser/gesUrlaub}" type="Number">
+                                </Input>
+							</f:fields>
+						</f:FormElement>
+                        <f:FormElement label="Resturlaub">
+							<f:fields>
+								<Input id="EmployeeEditVacationLastYear" value="{oEditModel>/EditUser/restUrlaub}" type="Number">
+                                </Input>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Notiz">
+							<f:fields>
+								<Input id="EmployeeEditNote" value="{oEditModel>/EditUser/note}">
+								</Input>
+							</f:fields>
+						</f:FormElement>
+					</f:formElements>
+				</f:FormContainer>
+			</f:formContainers>
+		</f:Form>
+	</VBox>
+	<endButton>
+            <Button text="Ändern" press=".editEmployee" tooltip="Drücke hier um die Änderung zu übernehmen" type="Accept"/>
+        </endButton>
+
+        <beginButton>
+            <Button text="Abbrechen" press=".closeEditDialog" tooltip="Drücke hier um abzubrechen" type="Reject"/>
+        </beginButton>
+    </Dialog>
+
+    </core:FragmentDefinition>
