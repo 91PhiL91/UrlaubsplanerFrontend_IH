@@ -100,9 +100,16 @@
         },
         {
         "name": "RouteVacationManagement",
-          "pattern": "RouteVacationManagement./{userID}/{token}",
+          "pattern": "RouteVacationManagement/{userID}/{token}",
           "target": [
             "TargetVacationManagement"
+          ]
+        },
+        {
+          "name": "RouteTeamManagement",
+          "pattern": "RouteTeamManagement/{userID}/{token}",
+          "target": [
+            "TargetTeamManagement"
           ]
         }
       ],
@@ -128,6 +135,11 @@
           "viewType": "XML",
           "viewId": "VacationManagement",
           "viewName": "VacationManagement"
+        },
+        "TargetTeamManagement": {
+          "viewType": "XML",
+          "viewId": "TeamManagement",
+          "viewName": "TeamManagement"
         }
       }
     },

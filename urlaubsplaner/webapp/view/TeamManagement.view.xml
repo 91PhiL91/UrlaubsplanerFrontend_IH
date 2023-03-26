@@ -1,0 +1,116 @@
+<mvc:View controllerName="urlaubsplaner.urlaubsplaner.controller.TeamManagement" 
+	xmlns="sap.ui.table"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:u="sap.ui.unified"
+	xmlns:c="sap.ui.core"
+	xmlns:m="sap.m"
+	height="100%">
+	<m:Page
+		showHeader="true" 
+		showNavButton="true" 
+		title="Nutzerdaten" 
+		navButtonPress=".onNavBack"
+		enableScrolling="false"
+		class="sapUiContentPadding">
+		<m:content>
+			<Table
+				id="TeamTable"
+				selectionMode="None"
+				rows="{oTeamModel>/Teams}"
+				visibleRowCount="7"
+				ariaLabelledBy="title">
+				<extension>
+					<m:OverflowToolbar style="Clear">
+						<m:Title id="title" text="Team Verwaltung"/>
+						<m:ToolbarSpacer/>
+						<m:Button
+							icon="sap-icon://clear-filter"
+							tooltip="Filter zurücksetzen"
+							press="clearAllFilters"/>
+						<m:Button
+							icon="sap-icon://sys-add"
+							tooltip="Team anlegen"
+							type="Accept"
+							press="onCreateTeam"
+							visible="{oTeamModel>/bEdit}"/>
+						<m:Button
+							icon="sap-icon://delete"
+							tooltip="Team löschen"
+							type="Reject"
+							press="onDeleteFundus"
+							visible="{oTeamModel>/bEdit}"/>
+						<m:Button
+							text="Download"
+							press="onExportButtonPress"
+							icon="sap-icon://excel-attachment"
+							type="Emphasized"/>
+						<m:Button
+							icon="sap-icon://edit"
+							tooltip="Bearbeitungsmodus betreten"
+							press="onEdit"
+							visible="{= ${oTeamModel>/bEdit} === true ? false : true}"/>
+						<m:Button
+							icon="sap-icon://cancel"
+							tooltip="Bearbeitungsmodus beenden"
+							press="onAbortEdit"
+							visible="{oTeamModel>/bEdit}"/>
+					</m:OverflowToolbar>
+				</extension>
+				<columns>
+					<Column width="auto">
+						<m:Label text="Team ID" />
+						<template>
+							<m:Text text="{oTeamModel>teamID}" wrapping="false"/>
+						</template>
+					</Column>
+					<Column
+						id="teamName"
+						width="auto"
+						sortProperty="teamName"
+						filterProperty="teamName">
+						<m:Label text="Team Name" />
+						<template>
+							<!-- <m:Text text="{oTeamModel>teamName}" wrapping="false" /> -->
+                            	<m:Text text="Test Text" wrapping="false" />
+						</template>
+					</Column>
+					<Column
+						id="teamLeader"
+						width="auto"
+						sortProperty="teamLeader"
+						filterProperty="teamLeader">
+						<m:Label text="Teamleiter" />
+						<template>
+							<m:Text text="{oTeamModel>teamlead/vorname} {oTeamModel>teamLeader/nachname}" wrapping="false" />
+						</template>
+					</Column>
+					<Column
+						width="auto"
+						filterProperty="note">
+						<m:Label text="Notiz" />
+						<template>
+							<m:Text text="{oTeamModel>note}" />
+						</template>
+					</Column>
+					<Column
+						visible="{oTeamModel>/bEdit}"
+						id="edit"
+						width="3.5rem">
+						<m:Label text=""/>
+						<template>
+							<m:Button icon="sap-icon://edit"
+							tooltip="Team bearbeiten"
+							press="onEditTeam"/>
+						</template>
+					</Column>
+				</columns>
+				<footer>
+					<m:OverflowToolbar id="infobar"></m:OverflowToolbar>
+				</footer>
+			</Table>
+			
+		</m:content>
+		
+	</m:Page>
+	
+</mvc:View>

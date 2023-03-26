@@ -170,7 +170,7 @@ sap.ui.define([
             
             teamHandleClick: function () {
                 
-                this.getOwnerComponent().getRouter().navTo("RouteTeams", 
+                this.getOwnerComponent().getRouter().navTo("RouteTeamManagement", 
                 {
                     userID : this.userID,
                     token: this.token
