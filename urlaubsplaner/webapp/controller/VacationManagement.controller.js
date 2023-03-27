@@ -76,7 +76,7 @@ sap.ui.define([
 			var oView = this.getView();
 			var oModel = new sap.ui.model.json.JSONModel();
 			var oKalenderModel = new sap.ui.model.json.JSONModel();
-			var aArray = [];
+			var aVacation = [];
 			var oController = this;
 			
 
@@ -85,33 +85,34 @@ sap.ui.define([
 			var oParams = { "userID": this.userID, "token" : this.token };
 			var sURL = "http://localhost:3000/api/UserById";
 
-			Datahelper.read(sURL, oParams, oController).then(function(oResponse){
-				console.log(oResponse.data);
-// debugger;
-                oResponse.data.appointments.forEach(vacationObject => {
-						console.log(vacationObject);
-						vacationObject.type = "Type05";
-						var dateObject = new Date(vacationObject.endDatum);
-						console.log("EndDatum:" + endDate);
-						console.log(dateObject);
-						vacationObject.endDate = dateObject;
-						dateObject = new Date(vacationObject.startDate);
-						console.log("StartDatum:");
-						console.log(dateObject);
-						vacationObject.startDate = dateObject;
-					});
-			}.bind(this)).catch(function(oError){
-					oModel.setProperty("/User", oResponse.data);
-					oView.setModel(oModel, "userDetail");
-					aArray.push(oResponse.data);
-					oKalenderModel.setProperty("/people", aArray);
-					oView.setModel(oKalenderModel, "urlaubKalenderModel");
-				if(oResponse.status === 401){
-				 			MessageToast.show("Deine Sitzung ist abgelaufen");
-				 			var oRouter = oController.getOwnerComponent().getRouter();
-							oRouter.navTo("RouteLogin", {}, true);
-				}
-			})
+// 			Datahelper.read(sURL, oParams, oController).then(function(oResponse){
+// 				console.log(oResponse.data);
+// // debugger;
+//                 oResponse.data.appointments.forEach(vacationObject => {
+// 						console.log(vacationObject);
+// 						vacationObject.type = "Type05";
+// 						var dateObject = new Date(vacationObject.endDate);
+// 						console.log("EndDatum:");
+// 						console.log(dateObject);
+// 						vacationObject.endDate = dateObject;
+// 						dateObject = new Date(vacationObject.startDate);
+// 						console.log("StartDatum:");
+// 						console.log(dateObject);
+// 						vacationObject.startDate = dateObject;
+// 					});
+// 					oModel.setProperty("/User", oResponse.data);
+// 					oView.setModel(oModel, "userDetail");
+// 					aArray.push(oResponse.data);
+// 					oKalenderModel.setProperty("/people", aArray);
+// 					oView.setModel(oKalenderModel, "urlaubKalenderModel");
+// 			}.bind(this)).catch(function(oResponse){
+					
+// 				if(oResponse.status === 401){
+// 				 			MessageToast.show("Deine Sitzung ist abgelaufen");
+// 				 			var oRouter = oController.getOwnerComponent().getRouter();
+// 							oRouter.navTo("RouteLogin", {}, true);
+// 				}
+// 			})
 // debugger;
 
 
@@ -160,23 +161,23 @@ sap.ui.define([
 
 
 
-			var oParams = { "teamLeiterID": this.userID, "token" : this.token};
+			var oParams = { "teamLeaderID": this.userID, "token" : this.token};
 			var sURL = "http://localhost:3000/api/Vacation";
 
 			Datahelper.read(sURL, oParams, oController).then(function(oResponse){
 				console.log("Hier drunter müssten die 21 Strings stehen")
                 console.log(oResponse);
-				for (let index = 0; index < oResponse.length; index++) {
-					let vacation = oResponse[index];
-					if(vacation.status === "0"){
-						aVacation.push(oResponse[index]);
+				for (let index = 0; index < oResponse.data.length; index++) {
+					let vacation = oResponse.data[index];
+					if(vacation.status === "In bearbeitung"){
+						aVacation.push(oResponse.data[index]);
 					}
 				}
-				oModel.setProperty("/Urlaube", aVacation);
-				oView.setModel(oModel, "oTeamUrlaubsModel");
+				oModel.setProperty("/Vacation", aVacation);
+				oView.setModel(oModel, "oTeamVacationsModel");
 			}.bind(this)).catch(function(oError){
 				console.log(oError);
-				if(oResponse.status === 401){
+				if(oError.status === 401){
 				 			MessageToast.show("Deine Sitzung ist abgelaufen");
 				 			var oRouter = oController.getOwnerComponent().getRouter();
 							oRouter.navTo("RouteLogin", {}, true);

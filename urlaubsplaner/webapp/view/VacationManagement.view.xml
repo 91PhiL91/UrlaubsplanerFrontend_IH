@@ -1,7 +1,7 @@
 <mvc:View controllerName="urlaubsplaner.urlaubsplaner.controller.VacationManagement" xmlns="sap.ui.table" xmlns:mvc="sap.ui.core.mvc" xmlns:u="sap.ui.unified" xmlns:c="sap.ui.core" xmlns:m="sap.m" height="100%">
     <m:Page enableScrolling="false" class="sapUiContentPadding" showHeader="true" showNavButton="true" title="Urlaubsverwaltung" navButtonPress=".onNavBack">
         <m:content>
-            <Table id="vacationTable" selectionMode="MultiToggle"  rows="{path: 'oTeamUrlaubsModel>/Urlaube'}" visibleRowCount="7" sort="sortDeliveryDate" ariaLabelledBy="title">
+            <Table id="vacationTable" selectionMode="MultiToggle"  rows="{path: 'oTeamVacationsModel>/Vacation'}" visibleRowCount="7" sort="sortDeliveryDate" ariaLabelledBy="title">
                 <extension>
                     <m:OverflowToolbar style="Clear">
                         <m:Title id="title" text="Beantragte Urlaube" />
@@ -22,19 +22,19 @@
                     <Column width="auto" >
                         <m:Label text="Mitarbeiter" />
                         <template>
-                            <m:Link text="{oTeamUrlaubsModel>vorname} {oTeamUrlaubsModel>nachname}" />
+                            <m:Link text="{oTeamVacationsModel>vorname} {oTeamUrlaubsModel>nachname}" />
                         </template>
                     </Column>
-                    <Column id="name" width="auto" sortProperty="name">
+                    <Column id="startDate" width="auto" sortProperty="startDate">
                         <m:Label text="Von" />
                         <template>
-                            <m:Text text="{oTeamUrlaubsModel>startDatum}" wrapping="false" />
+                            <m:Text text="{oTeamVacationsModel>startDate}" wrapping="false" />
                         </template>
                     </Column>
                     <Column id="categories" width="auto" showSortMenuEntry="false" sortProperty="Category">
                         <m:Label text="Bis" />
                         <template>
-                            <m:Text text="{oTeamUrlaubsModel>endDatum}" wrapping="false" />
+                            <m:Text text="{oTeamVacationsModel>endDatum}" wrapping="false" />
                         </template>
                     </Column>
                     <Column width="auto">
@@ -46,13 +46,13 @@
                     <Column id="quantity" width="auto" sortProperty="Quantity">
                         <m:Label text="Rest Jahr Urlaub" />
                         <template>
-                            <m:Text text="{oTeamUrlaubsModel>restUrlaub}" wrapping="false" />
+                            <m:Text text="{oTeamVacationsModel>restUrlaub}" wrapping="false" />
                         </template>
                     </Column>
                     <Column id="deliverydate" width="auto" sortProperty="DeliveryDateStr">
                         <m:Label text="Status" />
                         <template>
-                            <m:Text text="{oTeamUrlaubsModel>status}" wrapping="false" />
+                            <m:Text text="{oTeamVacationsModel>status}" wrapping="false" />
                         </template>
                     </Column>
                 </columns>
