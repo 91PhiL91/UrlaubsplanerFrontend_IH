@@ -44,7 +44,7 @@ sap.ui.define([
 		onRouteMatched: function (oEvent) {
 
             this.token = oEvent.getParameter("arguments").token;
-			this.userId = oEvent.getParameter("arguments").userId;
+			this.userId = oEvent.getParameter("arguments").userID;
 			var oController = this;
 
 
