@@ -49,7 +49,7 @@ sap.ui.define([
 				var oView = this.getView();
 				oModel.setProperty("/bEdit", false);
 				oView.setModel(oModel, "oEmployeesModel");
-				this.loadData();
+				this.loadDataTeam();
 			} else {
 				MessageToast.show("Deine Sitzung ist abgelaufen");
 				var oRouter = oController.getOwnerComponent().getRouter();
@@ -65,8 +65,53 @@ sap.ui.define([
 		},
 		
 		
-		loadData(){
+		loadDataTeam(){
 
+			var oView = this.getView();
+			var oModel = oView.getModel("oEmployeesModel");
+			var oController = this;
+			
+
+
+
+			var oParams = { "token": this.token };
+			var sURL = "http://localhost:3000/api/Team";
+
+			Datahelper.read(sURL, oParams, oController).then(function (oResponse) {
+				console.log(" Abfrage Team");
+				console.log(oResponse);
+				oModel.setProperty("/Team", oResponse.data)
+				oView.setModel(oModel, "oEmployeesModel");
+				this.loadData();
+				
+	
+			}.bind(this)).catch(function (oError) {
+				console.log(oError);
+				if (oResponse.status === 401) {
+					MessageToast.show("Deine Sitzung ist abgelaufen");
+					var oRouter = oController.getOwnerComponent().getRouter();
+					oRouter.navTo("RouteLogin", {}, true);
+				}
+			})
+
+
+
+		},
+		
+		
+		
+		loadData: function () {
+
+			
+			//Aufruf GET /Api/User
+
+			
+			
+			
+			
+			
+			
+			
 			var oView = this.getView();
 			var oModel = oView.getModel("oEmployeesModel");
 			var oController = this;
@@ -79,59 +124,23 @@ sap.ui.define([
 
 			Datahelper.read(sURL, oParams, oController).then(function (oResponse) {
 				console.log(oResponse.allUsers);
-				oModel.setProperty("/Users", oResponse.allUsers);
-				//oView.setModel(oModel, "oEmployeesModel");			
-				oController.loadDataTeam();
 
-				
-				
-			}.bind(this)).catch(function (oError) {
-				console.log(oError);
-				if (oResponse.status === 401) {
-					MessageToast.show("Deine Sitzung ist abgelaufen");
-					var oRouter = oController.getOwnerComponent().getRouter();
-					oRouter.navTo("RouteLogin", {}, true);
-				}
-			})
+				var oTeamArray = oModel.getProperty("/Team");
+				aTeam.forEach(oTeam => {
+					var oTeamID = oTeam.teamID;
+					var oMatchTeam = oTeamArray.find(function (oTeam) {
+						return oTeam.teamID === oTeamID;
+					});
+					if(oMatchTeam){
+						oTeam.teamName = oMatchTeam.teamName;
+					}
 
-
-			
-
-
-		},
-		
-		
-		
-		loadDataTeam: function () {
-
-			var oView = this.getView();
-			var oModel = oView.getModel("oEmployeesModel");
-			var oController = this;
-			aTeam = [];
-
-
-
-			var oParams = { "token": this.token };
-			var sURL = "http://localhost:3000/api/Team";
-
-			Datahelper.read(sURL, oParams, oController).then(function (oResponse) {
-				aTeam = oResponse.data;
-			var oUserArray = oModel.getProperty("/Users");
-			aTeam.forEach(oTeam => {
-				var oTeamID = oTeam.teamID;
-				var oMatchTeam = oUserArray.find(function (oTeam){
-					return oTeam.teamName === oTeamID;
 				});
-				if(oMatchTeam){
-					oTeam.teamName = oMatchTeam.teamName;
-				}
 
 
-			});	
-
-			oModel.setProperty("/Team", aTeam);
-			oView.setModel(oModel, "EmployessModel");
-
+				oModel.setProperty("/Users", oResponse.allUsers);
+				oView.setModel(oModel, "oEmployeesModel");
+				
 				
 			}.bind(this)).catch(function (oError) {
 				console.log(oError);
@@ -142,16 +151,6 @@ sap.ui.define([
 				}
 			})
 
-			//Aufruf GET /Api/User
-
-			
-			
-			
-			
-			
-			
-			
-		
 
 
 			

@@ -71,7 +71,7 @@
 						<m:Label text="Team Name" />
 						<template>
 							<!-- <m:Text text="{oTeamModel>teamName}" wrapping="false" /> -->
-                            	<m:Text text="Test Text" wrapping="false" />
+                            	<m:Text text="{oTeamModel>teamName}" wrapping="false" />
 						</template>
 					</Column>
 					<Column
@@ -81,7 +81,7 @@
 						filterProperty="teamLeader">
 						<m:Label text="Teamleiter" />
 						<template>
-							<m:Text text="{oTeamModel>teamlead/vorname} {oTeamModel>teamLeader/nachname}" wrapping="false" />
+							<m:Text text="{oTeamModel>teamlead}" wrapping="false" />
 						</template>
 					</Column>
 					<Column

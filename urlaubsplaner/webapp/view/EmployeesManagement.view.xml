@@ -103,7 +103,7 @@
 						filterProperty="teamName">
 						<m:Label text="Team" />
 						<template>
-							<m:Text text="{oEmployeesModel>/teamID}" wrapping="false"  />
+							<m:Text text="{oEmployeesModel>teamName}" wrapping="false"  />
 						</template>
 					</Column>
 					<Column width="auto"

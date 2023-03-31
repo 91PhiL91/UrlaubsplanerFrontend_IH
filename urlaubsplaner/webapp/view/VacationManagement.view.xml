@@ -22,7 +22,7 @@
                     <Column width="auto" >
                         <m:Label text="Mitarbeiter" />
                         <template>
-                            <m:Link text="{oTeamVacationsModel>vorname} {oTeamUrlaubsModel>nachname}" />
+                            <m:Link text="{oTeamVacationsModel>firstName} {oTeamVacationsModel>lastName}" />
                         </template>
                     </Column>
                     <Column id="startDate" width="auto" sortProperty="startDate">
@@ -34,19 +34,19 @@
                     <Column id="categories" width="auto" showSortMenuEntry="false" sortProperty="Category">
                         <m:Label text="Bis" />
                         <template>
-                            <m:Text text="{oTeamVacationsModel>endDatum}" wrapping="false" />
+                            <m:Text text="{oTeamVacationsModel>endDate}" wrapping="false" />
                         </template>
                     </Column>
                     <Column width="auto">
                         <m:Label text="Gesamt Urlaub" />
                         <template>
-                            <m:Text text="Test" wrapping="false" />
+                            <m:Text text="{oTeamVacationsModel>totalVacation}" wrapping="false" />
                         </template>
                     </Column>
                     <Column id="quantity" width="auto" sortProperty="Quantity">
                         <m:Label text="Rest Jahr Urlaub" />
                         <template>
-                            <m:Text text="{oTeamVacationsModel>restUrlaub}" wrapping="false" />
+                            <m:Text text="{oTeamVacationsModel>restVacation}" wrapping="false" />
                         </template>
                     </Column>
                     <Column id="deliverydate" width="auto" sortProperty="DeliveryDateStr">

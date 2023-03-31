@@ -15,7 +15,7 @@ sap.ui.define([
 	// "urlaubsplaner/urlaubsplaner/utils/xlsx",
 	"./helper/ResponseStatusHelper",
 	"./helper/DataHelper"
-], function(Log, Controller, Sorter, JSONModel, DateFormat, ToolbarSpacer, library, jQuery, Fragment, MessageToast, Export, ExportTypeCSV, MessageBox, xlsx, ResponseStatusHelper, Datahelper) {
+], function(Log, Controller, Sorter, JSONModel, DateFormat, ToolbarSpacer, library, jQuery, Fragment, MessageToast, Export, ExportTypeCSV, MessageBox, /*xlsx*/ ResponseStatusHelper, Datahelper) {
 	"use strict";
 
 	// shortcut for sap.ui.table.SortOrder
@@ -44,13 +44,14 @@ sap.ui.define([
 		onRouteMatched: function (oEvent) {
 
             this.token = oEvent.getParameter("arguments").token;
-			this.userId = oEvent.getParameter("arguments").userID;
+			this.userID = oEvent.getParameter("arguments").userID;
 			var oController = this;
 
 
 			if(this.token){
 				var oModel = new sap.ui.model.json.JSONModel();
 				var oView = this.getView();
+				//Edit Modus wird erstmal auf false gesetzt 
 				oModel.setProperty("/bEdit", false);
 				oView.setModel(oModel, "oTeamModel");
 				this.loadData();
@@ -62,7 +63,7 @@ sap.ui.define([
 		},
 		onNavBack: function () {
 			this.getOwnerComponent().getRouter().navTo("RouteDashboard", {
-				userId: this.userId,
+				userID: this.userID,
 				token: this.token
 				
 			   });
@@ -75,43 +76,24 @@ sap.ui.define([
 			var oView = this.getView();
 			var oModel = oView.getModel("oTeamModel");
 			var oController = this;
-			// var oParams = {"token" : this.token};
-			// var sURL = "http://localhost:3000/api/User";
+			var oParams = {"token" : this.token};
+			var sURL = "http://localhost:3000/api/User";
 
-			// Datahelper.read(sURL, oParams, oController).then(function(oResponse){
-			// 	console.log(oResponse);
-			// 	oModel.setProperty("/Users", oResponse.users)
-			// 	oView.setModel(oModel, "oTeamModel");
-			// 	oController.loadTeamData();
-			// }.bind(this)).catch(function(oError){
-			// 	console.log(oError);
-			// })
-
-
-			jQuery.ajax({
-				type: "GET",
-				contentType: "application/xml",
-				url: "http://localhost:3000/api/User",
-				dataType: "json",
-				data: $.param({ "token" : this.token}),
-				async: true,
-				success: function (oResponse) {
-					console.log(oResponse);
-					oModel.setProperty("/Users", oResponse)
-					oView.setModel(oModel, "oTeamModel");
-                    console.log("Hier drunter sollte das oTeamModel sein");
-                    console.log(oModel);
-					oController.loadTeamData();
-				},
-				error: function (oResponse) {
-					ResponseStatusHelper.handleStatusCode(oResponse,oController);
-				}
+			Datahelper.read(sURL, oParams, oController).then(function(oResponse){
+				console.log(oResponse.allUsers);
+				oModel.setProperty("/Users", oResponse.allUsers)
+				oView.setModel(oModel, "oTeamModel");
+				oController.loadTeamData();
+			}.bind(this)).catch(function(oError){
+				console.log(oError);
 			})
+
+
 
 		},
 
 
-		loadDataIntoUser: function (userId) {
+		loadDataIntoUser: function (userID) {
 
 			//Aufruf  POST  /api/user
 
@@ -180,37 +162,38 @@ sap.ui.define([
 
 
 		loadTeamData: function(){
+
 			var oModel = this.getView().getModel("oTeamModel");
+		
+			var oParams = { "token" : this.token};
+			var sURL = "http://localhost:3000/api/Team";
+			var oController = this;
 
+			Datahelper.read(sURL, oParams, oController).then(function(oResponse){
+				console.log("Hier Drunter stehe die oResponse von /api/Team");
+				console.log(oResponse.data);
 
-
-
-
-
-
-
-			// var oParams = { "token" : this.token};
-			// var sURL = "http://localhost:3000/api/Team";
-
-			// Datahelper.read(sURL, oParams, oController).then(function(oResponse){
-			// 	console.log("Team Daten geladen!");
-            //     var oUserArray = oModel.getProperty("/Users");
-			// 		oResponse.forEach(oTeam => {
-			// 			var oTeamlead = oUserArray.find(function (oUser) {
-			// 				return oUser.userId === oTeam.teamLeiterId;
-			// 			});
-			// 			oTeam.teamlead = oTeamlead;
-			// 		});
-			// 		oModel.setProperty("/Teams", oResponse)
-			// }.bind(this)).catch(function(oError){
-			// 	console.log(oError);
-			// 	if(oResponse.status === 401){
-			// 	 			MessageToast.show("Deine Sitzung ist abgelaufen");
-			// 	 			var oRouter = oController.getOwnerComponent().getRouter();
-			// 				oRouter.navTo("RouteLogin", {}, true);
-			// 	}
-            //     sap.m.MessageToast.show("BenutzerName oder Passwort falsch!");
-			// })
+                var oUserArray = oModel.getProperty("/Users");
+				console.log(oUserArray);
+					oResponse.data.forEach(oTeam => {
+						var oTeamleadID = oTeam.teamLeaderID;
+						var oTeamlead = oUserArray.find(function (oUser) {
+						  return oUser.userID === oTeamleadID;
+						});
+						oTeam.teamlead = oTeamlead.firstName + " " + oTeamlead.lastName;
+					});
+					oModel.setProperty("/Teams", oResponse.data);
+	
+					
+			}.bind(this)).catch(function(oResponse){
+				console.log(oResponse);
+				if(oResponse.status === 401){
+				 			MessageToast.show("Deine Sitzung ist abgelaufen");
+				 			var oRouter = oController.getOwnerComponent().getRouter();
+							oRouter.navTo("RouteLogin", {}, true);
+				}
+                sap.m.MessageToast.show("BenutzerName oder Passwort falsch!");
+			})
 
 
 
@@ -219,33 +202,33 @@ sap.ui.define([
 
 
 			
-			jQuery.ajax({
-				type: "GET",
-				contentType: "application/json",
-				url: "http://localhost:3000/api/Team",
-				data: $.param({ "token" : this.token}),
-				dataType: "json",
-				async: true,
-				success: function (oResponse) {
-					console.log("Team Daten geladen!");
-					var oUserArray = oModel.getProperty("/Users");
-					oResponse.forEach(oTeam => {
-						var oTeamlead = oUserArray.find(function (oUser) {
-							return oUser.userID === oTeam.teamLeiterID;
-						});
-						oTeam.teamlead = oTeamlead;
-					});
-					oModel.setProperty("/Teams", oResponse)
-				},
-				error: function (oResponse) {
-					console.log(oResponse);
-					if(oResponse.status === 401){
-						MessageToast.show("Deine Sitzung ist abgelaufen");
-						var oRouter = oController.getOwnerComponent().getRouter();
-						oRouter.navTo("RouteLogin", {}, true);
-					}
-				}
-			})
+			// jQuery.ajax({
+			// 	type: "GET",
+			// 	contentType: "application/json",
+			// 	url: "http://localhost:3000/api/Team",
+			// 	data: $.param({ "token" : this.token}),
+			// 	dataType: "json",
+			// 	async: true,
+			// 	success: function (oResponse) {
+			// 		console.log("Team Daten geladen!");
+			// 		var oUserArray = oModel.getProperty("/Users");
+			// 		oResponse.forEach(oTeam => {
+			// 			var oTeamlead = oUserArray.find(function (oUser) {
+			// 				return oUser.userID === oTeam.teamLeaderID;
+			// 			});
+			// 			oTeam.teamlead = oTeamlead;
+			// 		});
+			// 		oModel.setProperty("/Teams", oResponse)
+			// 	},
+			// 	error: function (oResponse) {
+			// 		console.log(oResponse);
+			// 		if(oResponse.status === 401){
+			// 			MessageToast.show("Deine Sitzung ist abgelaufen");
+			// 			var oRouter = oController.getOwnerComponent().getRouter();
+			// 			oRouter.navTo("RouteLogin", {}, true);
+			// 		}
+			// 	}
+			// })
 
 
 		},
@@ -341,7 +324,7 @@ sap.ui.define([
 			var oView = this.getView();
 			var oController = this;
 			var sTeamName= oView.byId("TeamCreateName").getValue();
-			var sTeamLeader = oView.byId("TeamEditTeamLeiterId").getSelectedKey();
+			var sTeamLeader = oView.byId("TeamEditteamLeaderID").getSelectedKey();
 			
 			
 			
@@ -349,7 +332,7 @@ sap.ui.define([
 				url: "/api/Team",
 				method: "POST",
 				data: {
-					teamLeiterId: sTeamLeader,
+					teamLeaderID: sTeamLeader,
 					teamName: sTeamName,
 					token: this.token
 
@@ -374,7 +357,7 @@ sap.ui.define([
 			var oController = this;
 			var oEditTeam = oView.getModel("oEditModel").getProperty("/EditTeam");
 			var sTeamName= oView.byId("TeamEditName").getValue();
-			var sTeamLeader = oView.byId("TeamEditTeamLeiterId").getSelectedKey();
+			var sTeamLeader = oView.byId("TeamEditteamLeaderID").getSelectedKey();
 			console.log(oEditTeam);
 
 
@@ -382,7 +365,7 @@ sap.ui.define([
 
 
 
-			// var oParams = {teamLeiterId: sTeamLeader, teamName: sTeamName, teamId:  oEditTeam.teamId, token: this.token};
+			// var oParams = {teamLeaderID: sTeamLeader, teamName: sTeamName, teamId:  oEditTeam.teamId, token: this.token};
 			// var sURL = "http://localhost:3000/api/Team";
 
 			// Datahelper.update(sURL, oParams, oController).then(function(oResponse){
@@ -406,7 +389,7 @@ sap.ui.define([
 				dataType: "json",
 				async: true,
 				data: JSON.stringify({
-					teamLeiterId: sTeamLeader,
+					teamLeaderID: sTeamLeader,
 					teamName: sTeamName,
 					teamId:  oEditTeam.teamId,
 					token: this.token
@@ -530,7 +513,7 @@ sap.ui.define([
 					contentType: "application/json",
 					url: "http://localhost:3000/api/Team",
 					dataType: "json",
-					data: JSON.stringify({ teamLeiterId: Team.teamLeiterId, teamId: Team.teamId, token : this.token}),
+					data: JSON.stringify({ teamLeaderID: Team.teamLeaderID, teamId: Team.teamId, token : this.token}),
 					async: true,
 					success: function (oResponse) {
 						sap.m.MessageToast.show("Update erfolgreich!")
@@ -543,7 +526,7 @@ sap.ui.define([
 
 	},
 
-		getUserNameById: function(userId) {
+		getUserNameById: function(userID) {
 		
 			var oModel = this.getView().getModel('oTeamModel');
 
