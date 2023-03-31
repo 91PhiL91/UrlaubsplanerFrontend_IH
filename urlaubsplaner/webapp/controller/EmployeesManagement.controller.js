@@ -85,8 +85,8 @@ sap.ui.define([
 
 				
 				
-			}.bind(this)).catch(function (oError) {
-				console.log(oError);
+			}.bind(this)).catch(function (oResponse) {
+				console.log(oResponse);
 				if (oResponse.status === 401) {
 					MessageToast.show("Deine Sitzung ist abgelaufen");
 					var oRouter = oController.getOwnerComponent().getRouter();
@@ -107,7 +107,7 @@ sap.ui.define([
 			var oView = this.getView();
 			var oModel = oView.getModel("oEmployeesModel");
 			var oController = this;
-			aTeam = [];
+		    var aTeam = [];
 
 
 
@@ -120,10 +120,10 @@ sap.ui.define([
 			aTeam.forEach(oTeam => {
 				var oTeamID = oTeam.teamID;
 				var oMatchTeam = oUserArray.find(function (oTeam){
-					return oTeam.teamName === oTeamID;
+					return oTeam.teamID === oTeamID;
 				});
 				if(oMatchTeam){
-					oTeam.teamName = oMatchTeam.teamName;
+					oMatchTeam.teamName = oTeam.teamName;
 				}
 
 
